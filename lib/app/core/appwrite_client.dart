@@ -1,5 +1,5 @@
 import 'package:appwrite/appwrite.dart';
-import 'package:twitter_clone/constants/constants.dart';
+import 'package:twitter_clone/app/constants/constants.dart';
 
 Client client = Client()
     .setEndpoint(AppWriteConstants.apiEndpoint)

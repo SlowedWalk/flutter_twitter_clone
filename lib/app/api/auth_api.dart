@@ -2,9 +2,9 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:twitter_clone/app/core/core.dart';
+import 'package:twitter_clone/app/core/providers.dart';
 import 'package:twitter_clone/core/Failure.dart';
-import 'package:twitter_clone/core/core.dart';
-import 'package:twitter_clone/core/providers.dart';
 
 final authAPIProvider = Provider((ref) => AuthAPI(account: ref.watch(appwriteAccountProvider)));
 

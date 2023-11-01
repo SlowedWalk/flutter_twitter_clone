@@ -1,20 +1,24 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:twitter_clone/common/rounded_sm_btn.dart';
-import 'package:twitter_clone/constants/constants.dart';
-import 'package:twitter_clone/features/auth/views/sing_up_view.dart';
-import 'package:twitter_clone/features/auth/widgets/auth_feild.dart';
-import 'package:twitter_clone/theme/theme.dart';
 
-class LoginView extends StatefulWidget {
-  static route() => MaterialPageRoute(builder: (context) => const LoginView());
-  const LoginView({super.key});
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/app/common/common.dart';
+import 'package:twitter_clone/app/constants/constants.dart';
+import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
+import 'package:twitter_clone/app/features/auth/views/login_view.dart';
+import 'package:twitter_clone/app/features/auth/widgets/auth_feild.dart';
+import 'package:twitter_clone/app/theme/theme.dart';
+
+class SignUpView extends ConsumerStatefulWidget {
+  static route() => MaterialPageRoute(builder: (context) => const SignUpView());
+
+  const SignUpView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  ConsumerState<SignUpView> createState() => _SignUpViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _SignUpViewState extends ConsumerState<SignUpView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -24,6 +28,11 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
+  }
+
+  void handleSignUp() {
+    ref.read(authControllerProvider.notifier)
+        .signUp(email: emailController.text, password: passwordController.text, context: context);
   }
 
   @override
@@ -52,20 +61,7 @@ class _LoginViewState extends State<LoginView> {
                   Align(
                     alignment: Alignment.topRight,
                     child: RoundedSmBtn(
-                      onTap: () {
-                        final snackBar = SnackBar(
-                          content: const Text('Yay! A SnackBar!'),
-                          action: SnackBarAction(
-                            label: 'Undo',
-                            onPressed: () {
-                              // Some code to undo the change.
-                            },
-                          ),
-                        );
-                        // Find the ScaffoldMessenger in the widget tree
-                        // and use it to show a SnackBar.
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      },
+                      onTap: handleSignUp,
                       label: "Login",
                     ),
                   ),
@@ -73,20 +69,17 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(height: 40),
                   RichText(
                       text: TextSpan(
-                          text: "Don't have an account?",
-                          style: const TextStyle(
-                              fontSize: 16,
-                              color: Pallete.whiteColor
-                          ),
+                          text: "Already have an account?",
+                          style: const TextStyle(fontSize: 16, color: Pallete.whiteColor),
                           children: [
                             TextSpan(
-                                text: ' Sign up',
+                                text: ' Login',
                                 style: const TextStyle(
-                                    color: Pallete.blueColor,
-                                    fontSize: 16,
+                                  color: Pallete.blueColor,
+                                  fontSize: 16,
                                 ),
                                 recognizer: TapGestureRecognizer()..onTap = () {
-                                  Navigator.push(context, SignUpView.route());
+                                  Navigator.push(context, LoginView.route());
                                 }
                             )
                           ]

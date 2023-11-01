@@ -1,23 +1,20 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:twitter_clone/common/common.dart';
-import 'package:twitter_clone/constants/constants.dart';
-import 'package:twitter_clone/features/auth/controllers/auth_controller.dart';
-import 'package:twitter_clone/features/auth/views/login_view.dart';
-import 'package:twitter_clone/features/auth/widgets/auth_feild.dart';
-import 'package:twitter_clone/theme/theme.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/app/common/common.dart';
+import 'package:twitter_clone/app/constants/constants.dart';
+import 'package:twitter_clone/app/features/auth/views/sing_up_view.dart';
+import 'package:twitter_clone/app/features/auth/widgets/auth_feild.dart';
+import 'package:twitter_clone/app/theme/theme.dart';
 
-class SignUpView extends ConsumerStatefulWidget {
-  static route() => MaterialPageRoute(builder: (context) => const SignUpView());
-
-  const SignUpView({super.key});
+class LoginView extends StatefulWidget {
+  static route() => MaterialPageRoute(builder: (context) => const LoginView());
+  const LoginView({super.key});
 
   @override
-  ConsumerState<SignUpView> createState() => _SignUpViewState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
-class _SignUpViewState extends ConsumerState<SignUpView> {
+class _LoginViewState extends State<LoginView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -27,11 +24,6 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
-  }
-
-  void handleSignUp() {
-    ref.read(authControllerProvider.notifier)
-        .signUp(email: emailController.text, password: passwordController.text, context: context);
   }
 
   @override
@@ -60,7 +52,20 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                   Align(
                     alignment: Alignment.topRight,
                     child: RoundedSmBtn(
-                      onTap: handleSignUp,
+                      onTap: () {
+                        final snackBar = SnackBar(
+                          content: const Text('Yay! A SnackBar!'),
+                          action: SnackBarAction(
+                            label: 'Undo',
+                            onPressed: () {
+                              // Some code to undo the change.
+                            },
+                          ),
+                        );
+                        // Find the ScaffoldMessenger in the widget tree
+                        // and use it to show a SnackBar.
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      },
                       label: "Login",
                     ),
                   ),
@@ -68,17 +73,20 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                   const SizedBox(height: 40),
                   RichText(
                       text: TextSpan(
-                          text: "Already have an account?",
-                          style: const TextStyle(fontSize: 16, color: Pallete.whiteColor),
+                          text: "Don't have an account?",
+                          style: const TextStyle(
+                              fontSize: 16,
+                              color: Pallete.whiteColor
+                          ),
                           children: [
                             TextSpan(
-                                text: ' Login',
+                                text: ' Sign up',
                                 style: const TextStyle(
-                                  color: Pallete.blueColor,
-                                  fontSize: 16,
+                                    color: Pallete.blueColor,
+                                    fontSize: 16,
                                 ),
                                 recognizer: TapGestureRecognizer()..onTap = () {
-                                  Navigator.push(context, LoginView.route());
+                                  Navigator.push(context, SignUpView.route());
                                 }
                             )
                           ]
