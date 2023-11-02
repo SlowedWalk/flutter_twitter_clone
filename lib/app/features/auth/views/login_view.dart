@@ -1,23 +1,28 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/app/common/common.dart';
+import 'package:twitter_clone/app/common/loading_page.dart';
 import 'package:twitter_clone/app/constants/constants.dart';
+import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
 import 'package:twitter_clone/app/features/auth/views/sing_up_view.dart';
-import 'package:twitter_clone/app/features/auth/widgets/auth_feild.dart';
+import 'package:twitter_clone/app/features/auth/widgets/auth_field.dart';
 import 'package:twitter_clone/app/theme/theme.dart';
 
-class LoginView extends StatefulWidget {
+class LoginView extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(builder: (context) => const LoginView());
+
   const LoginView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends ConsumerState<LoginView> {
   final appbar = UIConstants.appBar();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool loading = false;
 
   @override
   void dispose() {
@@ -26,77 +31,69 @@ class _LoginViewState extends State<LoginView> {
     passwordController.dispose();
   }
 
+  void handleLogin() {
+    ref.read(authControllerProvider.notifier).login(
+        email: emailController.text,
+        password: passwordController.text,
+        context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(authControllerProvider);
     return Scaffold(
         appBar: appbar,
-        body: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  // textfeild 1
-                  AuthFeild(
-                    controller: emailController,
-                    hintText: 'Email',
-                  ),
-                  const SizedBox(height: 25),
-                  // textfeild 1
-                  AuthFeild(
-                    controller: passwordController,
-                    hintText: 'Password',
-                  ),
-                  const SizedBox(height: 40),
-                  // button
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: RoundedSmBtn(
-                      onTap: () {
-                        final snackBar = SnackBar(
-                          content: const Text('Yay! A SnackBar!'),
-                          action: SnackBarAction(
-                            label: 'Undo',
-                            onPressed: () {
-                              // Some code to undo the change.
-                            },
+        body: isLoading
+            ? const Loader()
+            : Center(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      children: [
+                        // textfeild 1
+                        AuthField(
+                          controller: emailController,
+                          hintText: 'Email',
+                        ),
+                        const SizedBox(height: 25),
+                        // textfeild 1
+                        AuthField(
+                          controller: passwordController,
+                          hintText: 'Password',
+                        ),
+                        const SizedBox(height: 40),
+                        // button
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: RoundedSmBtn(
+                            onTap: handleLogin,
+                            label: "Login",
                           ),
-                        );
-                        // Find the ScaffoldMessenger in the widget tree
-                        // and use it to show a SnackBar.
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      },
-                      label: "Login",
-                    ),
-                  ),
-                  // textspan
-                  const SizedBox(height: 40),
-                  RichText(
-                      text: TextSpan(
-                          text: "Don't have an account?",
-                          style: const TextStyle(
-                              fontSize: 16,
-                              color: Pallete.whiteColor
-                          ),
-                          children: [
-                            TextSpan(
-                                text: ' Sign up',
+                        ),
+                        const SizedBox(height: 40),
+                        RichText(
+                            text: TextSpan(
+                                text: "Don't have an account?",
                                 style: const TextStyle(
+                                    fontSize: 16, color: Pallete.whiteColor),
+                                children: [
+                              TextSpan(
+                                  text: ' Sign up',
+                                  style: const TextStyle(
                                     color: Pallete.blueColor,
                                     fontSize: 16,
-                                ),
-                                recognizer: TapGestureRecognizer()..onTap = () {
-                                  Navigator.push(context, SignUpView.route());
-                                }
-                            )
-                          ]
-                      )
-                  )
-                ],
-              ),
-            ),
-          ),
-        )
-    );
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                          context, SignUpView.route());
+                                    })
+                            ]))
+                      ],
+                    ),
+                  ),
+                ),
+              ));
   }
 }

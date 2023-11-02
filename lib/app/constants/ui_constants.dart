@@ -18,9 +18,12 @@ class UIConstants {
     );
   }
 
-  // static const List<Widget> bottomTabBarPages = [
-  //   TweetList(),
-  //   ExploreView(),
-  //   NotificationView(),
-  // ];
+  static const List<Widget> bottomTabBarPages = [
+    // TweetList(),
+    // ExploreView(),
+    // NotificationView(),
+    Text("Feed Sreen"),
+    Text("Search Screen"),
+    Text("Notification Screen"),
+ ];
 }

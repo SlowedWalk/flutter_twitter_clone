@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/app/theme/theme.dart';
 
-class AuthFeild extends StatelessWidget {
+class AuthField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  const AuthFeild({
+  const AuthField({
     super.key,
     required this.controller,
     required this.hintText

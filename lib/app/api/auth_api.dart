@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:twitter_clone/app/core/core.dart';
 import 'package:twitter_clone/app/core/providers.dart';
-import 'package:twitter_clone/core/Failure.dart';
+import 'package:twitter_clone/app/core/Failure.dart';
 
 final authAPIProvider = Provider((ref) => AuthAPI(account: ref.watch(appwriteAccountProvider)));
 
@@ -13,11 +13,16 @@ abstract class IAuthAPI {
     required String email,
     required String password,
 });
-  FutureEither<Account> signIn();
+  FutureEither<Session> signIn({
+    required String email,
+    required String password,
+  });
 
   FutureEither<String> resetPassword({
     required String password
   });
+
+  Future<User?> getCurrentUserAccount();
 }
 
 class AuthAPI implements IAuthAPI {
@@ -32,9 +37,18 @@ class AuthAPI implements IAuthAPI {
   }
 
   @override
-  FutureEither<Account> signIn() {
-    // TODO: implement signIn
-    throw UnimplementedError();
+  FutureEither<Session> signIn({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final session = await _account.createEmailSession(email: email, password: password);
+      return right(session);
+    } on AppwriteException catch(e, stackTrace) {
+      return left(Failure(e.message ?? 'An Unexpected error occurred!', stackTrace));
+    } catch(e, stackTrace) {
+      return left(Failure(e.toString(), stackTrace));
+    }
   }
 
   @override
@@ -46,6 +60,17 @@ class AuthAPI implements IAuthAPI {
       return left(Failure(e.message ?? 'An Unexpected error occurred!', stackTrace));
     } catch(e, stackTrace) {
       return left(Failure(e.toString(), stackTrace));
+    }
+  }
+
+  @override
+  Future<User?> getCurrentUserAccount() async {
+    try {
+      return await _account.get();
+    } on AppwriteException {
+      return null;
+    } catch(e) {
+      return null;
     }
   }
 }
