@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/app/common/common.dart';
-import 'package:twitter_clone/app/common/loading_page.dart';
 import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
 import 'package:twitter_clone/app/features/auth/views/sing_up_view.dart';
 import 'package:twitter_clone/app/features/home/views/home_view.dart';

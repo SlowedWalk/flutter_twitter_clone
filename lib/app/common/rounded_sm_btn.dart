@@ -11,8 +11,8 @@ class RoundedSmBtn extends StatelessWidget {
     super.key,
     required this.onTap,
     required this.label,
-    this.backgroundColor = Pallete.whiteColor,
-    this.textColor = Pallete.backgroundColor,
+    this.backgroundColor = Pallet.whiteColor,
+    this.textColor = Pallet.backgroundColor,
   });
 
   @override

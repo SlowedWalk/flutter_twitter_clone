@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/app/common/common.dart';
-import 'package:twitter_clone/app/common/loading_page.dart';
 import 'package:twitter_clone/app/constants/constants.dart';
 import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
 import 'package:twitter_clone/app/features/auth/views/sing_up_view.dart';
@@ -76,12 +75,12 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             text: TextSpan(
                                 text: "Don't have an account?",
                                 style: const TextStyle(
-                                    fontSize: 16, color: Pallete.whiteColor),
+                                    fontSize: 16, color: Pallet.whiteColor),
                                 children: [
                               TextSpan(
                                   text: ' Sign up',
                                   style: const TextStyle(
-                                    color: Pallete.blueColor,
+                                    color: Pallet.blueColor,
                                     fontSize: 16,
                                   ),
                                   recognizer: TapGestureRecognizer()

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:twitter_clone/app/constants/constants.dart';
 import 'package:twitter_clone/app/features/tweet/view/create_tweet_view.dart';
-import 'package:twitter_clone/app/theme/pallete.dart';
+import 'package:twitter_clone/app/theme/theme.dart';
 
 class HomeView extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -39,12 +39,12 @@ class _HomeViewState extends State<HomeView> {
       ),
       floatingActionButton: _pageIndex == 0 ? FloatingActionButton(
         onPressed: onCreateTweet,
-        backgroundColor: Pallete.blueColor,
-        child: const Icon(Icons.add, color: Pallete.whiteColor, size: 18,),
+        backgroundColor: Pallet.blueColor,
+        child: const Icon(Icons.add, color: Pallet.whiteColor, size: 18,),
       ) : null,
       bottomNavigationBar: CupertinoTabBar(
         height: 70,
-        backgroundColor: Pallete.backgroundColor,
+        backgroundColor: Pallet.backgroundColor,
         currentIndex: _pageIndex,
         onTap: onPageChanged,
         items: [
@@ -52,21 +52,21 @@ class _HomeViewState extends State<HomeView> {
             label: "Home",
             icon: SvgPicture.asset(
               AssetsConstants.homeFilledIcon,
-              color: _pageIndex == 0 ? Pallete.blueColor : Pallete.whiteColor
+              color: _pageIndex == 0 ? Pallet.blueColor : Pallet.whiteColor
             )
           ),
           BottomNavigationBarItem(
             label: "Search",
             icon: SvgPicture.asset(
               AssetsConstants.searchIcon,
-              color: _pageIndex == 1 ? Pallete.blueColor : Pallete.whiteColor
+              color: _pageIndex == 1 ? Pallet.blueColor : Pallet.whiteColor
             )
           ),
           BottomNavigationBarItem(
             label: "Notifications",
             icon: SvgPicture.asset(
               AssetsConstants.notifFilledIcon,
-              color: _pageIndex == 2 ? Pallete.blueColor : Pallete.whiteColor
+              color: _pageIndex == 2 ? Pallet.blueColor : Pallet.whiteColor
             )
           ),
         ],

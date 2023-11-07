@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:fpdart/fpdart.dart';
@@ -36,7 +34,7 @@ class UserAPI implements IUserAPI {
         data: userModel.toMap());
         return right(null);
     } on AppwriteException catch (e, stackTrace) {
-      return left(Failure(e.message ?? 'Some unexpected error occured', stackTrace));
+      return left(Failure(e.message ?? 'Some unexpected error occurred', stackTrace));
     } catch (e, stackTrace) {
       return left(Failure(e.toString(), stackTrace));
     }

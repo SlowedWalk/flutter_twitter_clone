@@ -3,13 +3,13 @@ import 'package:twitter_clone/app/theme/theme.dart';
 
 class AppTheme {
   static ThemeData theme = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: Pallete.backgroundColor,
+    scaffoldBackgroundColor: Pallet.backgroundColor,
     appBarTheme: const AppBarTheme(
-      backgroundColor: Pallete.backgroundColor,
+      backgroundColor: Pallet.backgroundColor,
       elevation: 0,
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: Pallete.blueColor,
+      backgroundColor: Pallet.blueColor,
     ),
   );
 }
