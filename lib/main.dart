@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/app/features/auth/views/login_view.dart';
 import 'app/common/common.dart';
 import 'app/features/auth/controllers/auth_controller.dart';
-import 'app/features/auth/views/sing_up_view.dart';
 import 'app/features/home/views/home_view.dart';
 import 'app/theme/app_theme.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends ConsumerWidget {
             if(user !=null) {
               return const HomeView();
             }
-            return const SignUpView();
+            return const LoginView();
           },
           error: (error, stackTrace) => ErrorPage(
               error: error.toString()

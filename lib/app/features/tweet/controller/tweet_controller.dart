@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
-import '../../../api/storage_api.dart';
-import '../../../api/tweet_api.dart';
-import '../../../core/enums/tweet_type_enum.dart';
-import '../../../core/utils.dart';
-import '../../auth/controllers/auth_controller.dart';
-import '../../../model/tweet_model.dart';
+import 'package:twitter_clone/app/api/storage_api.dart';
+import 'package:twitter_clone/app/api/tweet_api.dart';
+import 'package:twitter_clone/app/core/enums/tweet_type_enum.dart';
+import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
+import 'package:twitter_clone/app/model/tweet_model.dart';
+
+import 'package:twitter_clone/app/core/core.dart';
+
 
 final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((ref) {
   return TweetController(
@@ -16,6 +18,10 @@ final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((re
       tweetAPI: ref.watch(tweetAPIProvider),
       storageAPI: ref.watch(storageAPIProvider),
   );
+});
+
+final getTweetProvider = FutureProvider((ref) async {
+  return ref.watch(tweetControllerProvider.notifier).getTweets();
 });
 
 class TweetController extends StateNotifier<bool> {
@@ -28,11 +34,12 @@ class TweetController extends StateNotifier<bool> {
         _storageAPI = storageAPI,
         super(false);
 
-  void shareTweet({
-    required List<File> images,
-    required String text,
-    required BuildContext context,
-}) {
+  Future<List<Tweet>> getTweets() async {
+    final tweets = await _tweetAPI.getTweets();
+    return tweets.map((tweet) => Tweet.fromMap(tweet.data)).toList();
+  }
+
+  void shareTweet({ required List<File> images, required String text, required BuildContext context, }) {
     if (text.isEmpty) {
       showSnackBar(context, 'Please enter some text!');
       return;
@@ -52,12 +59,7 @@ class TweetController extends StateNotifier<bool> {
     }
   }
 
-  void _shareImageTweet({
-    required List<File> images,
-    required String text,
-    required BuildContext context,
-  }) async {
-
+  void _shareImageTweet({ required List<File> images, required String text, required BuildContext context,}) async {
     state = true;
     final hashtags = _getHashtagFromText(text);
     String link = _getLinkFromText(text);
@@ -82,10 +84,7 @@ class TweetController extends StateNotifier<bool> {
     response.fold((l) => showSnackBar(context, l.message), (r) => null);
   }
 
-  void _shareTextTweet({
-    required String text,
-    required BuildContext context,
-  }) async {
+  void _shareTextTweet({ required String text, required BuildContext context,}) async {
     state = true;
     final hashtags = _getHashtagFromText(text);
     String link = _getLinkFromText(text);

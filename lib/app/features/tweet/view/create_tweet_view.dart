@@ -1,12 +1,15 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../common/common.dart';
-import '../../../constants/constants.dart';
-import '../../auth/controllers/auth_controller.dart';
-import '../controller/tweet_controller.dart';
-import '../../../theme/theme.dart';
+import 'package:twitter_clone/app/common/common.dart';
+import 'package:twitter_clone/app/constants/constants.dart';
+import 'package:twitter_clone/app/core/core.dart';
+import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
+import 'package:twitter_clone/app/features/tweet/controller/tweet_controller.dart';
+import 'package:twitter_clone/app/theme/theme.dart';
 
 class CreateTweetScreen extends ConsumerStatefulWidget {
   static route() =>
@@ -22,15 +25,8 @@ class CreateTweetScreen extends ConsumerStatefulWidget {
 class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   final tweetTextController = TextEditingController();
 
-  // List<File> images = [];
-  List<String> images = [];
-
-  final List<String> imagesList = [
-    "https://picsum.photos/200/300",
-    'https://picsum.photos/200',
-    'https://picsum.photos/200',
-    'https://picsum.photos/200'
-  ];
+  List<File> images = [];
+  // List<String> images = [];
 
   @override
   void dispose() {
@@ -43,8 +39,7 @@ class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   }
 
   void onPickImage() async {
-    // images = await pickImages();
-    images = imagesList;
+    images = await pickImages();
     setState(() {});
   }
 
@@ -108,7 +103,7 @@ class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           margin: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Image.network(file),
+                          child: Image.file(file),
                         );
                       }).toList(),
                       options: CarouselOptions(
