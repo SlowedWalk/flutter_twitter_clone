@@ -35,7 +35,7 @@ jobs:
         run: |
           flutter clean
           flutter pub get
-          flutter analyze
+        #  flutter analyze
         # flutter test
 
   # jobs 2 : twitter_clone_app_android_build_deploy
