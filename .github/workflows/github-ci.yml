@@ -87,7 +87,7 @@ jobs:
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{secrets.DRIVE_CREDENTIALS}}
-          filename: "build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk"
+          filename: "archive.zip"
           folderId: ${{secrets.FOLDER_ID}}
 #          folderId: 1PuMPaHJ-OyoF9UYRVj7Hgj2AZWPHk5_F
 #          folderId: 1PuMPaHJ-OyoF9UYRVj7Hgj2AZWPHk5_F
