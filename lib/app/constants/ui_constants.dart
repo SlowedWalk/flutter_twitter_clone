@@ -11,7 +11,7 @@ class UIConstants {
     return AppBar(
       title: SvgPicture.asset(
         AssetsConstants.twitterLogo,
-        color: Pallet.blueColor,
+        colorFilter: const ColorFilter.mode(Pallet.blueColor, BlendMode.srcIn),
         height: 30,
       ),
       centerTitle: true,
