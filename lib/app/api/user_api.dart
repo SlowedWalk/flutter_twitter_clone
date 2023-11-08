@@ -3,7 +3,7 @@ import 'package:appwrite/models.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod/riverpod.dart';
 import '../constants/appwrite_constants.dart';
-import '../core/Failure.dart';
+import '../core/failure.dart';
 import '../core/core.dart';
 import '../core/providers.dart';
 import '../model/user_model.dart';

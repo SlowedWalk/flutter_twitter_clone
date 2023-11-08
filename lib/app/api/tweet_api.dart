@@ -3,7 +3,7 @@ import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import '../constants/constants.dart';
-import '../core/Failure.dart';
+import '../core/failure.dart';
 import '../core/core.dart';
 import '../core/providers.dart';
 import '../model/tweet_model.dart';

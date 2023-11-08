@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:riverpod/riverpod.dart';
 import '../core/core.dart';
 import '../core/providers.dart';
-import '../core/Failure.dart';
+import '../core/failure.dart';
 
 final authAPIProvider = Provider((ref) => AuthAPI(account: ref.watch(appwriteAccountProvider)));
 
