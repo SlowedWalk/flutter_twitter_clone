@@ -50,7 +50,9 @@ class AuthController extends StateNotifier<bool> {
     final response = await _authAPI.signUp(email: email, password: password);
     state = false;
     response.fold(
-      (l) => showSnackBar(context, l.message),
+      (l) {
+        if(l.message.isNotEmpty) showSnackBar(context, l.message);
+        },
       (r) async {
         UserModel userModel = UserModel(
           uid: r.$id,
@@ -64,10 +66,13 @@ class AuthController extends StateNotifier<bool> {
           isTwitterBlue: false,
         );
         final res = await _userAPI.saveUserData(userModel);
-        res.fold((l) => showSnackBar(context, l.message), (r) {
-          showSnackBar(context, "Account created, please login!");
-          Navigator.push(context, LoginView.route());
-        });
+        res.fold(
+          (l) => showSnackBar(context, "Error: ${l.message}"),
+          (r) {
+            showSnackBar(context, "Account created, please login!");
+            Navigator.push(context, LoginView.route());
+          }
+        );
       }
     );
   }
@@ -80,7 +85,10 @@ class AuthController extends StateNotifier<bool> {
     state = true;
     final response = await _authAPI.signIn(email: email, password: password);
     state = false;
-    response.fold((l) => showSnackBar(context, l.message),
+    response.fold(
+      (l) {
+        if(l.message.isNotEmpty) showSnackBar(context, l.message);
+        },
       (r) {
         showSnackBar(context, "Welcome!");
         Navigator.push(context, HomeView.route());
