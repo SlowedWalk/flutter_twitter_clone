@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:twitter_clone/app/constants/constants.dart';
-import 'package:twitter_clone/app/features/tweet/view/create_tweet_view.dart';
-import 'package:twitter_clone/app/theme/theme.dart';
+import '../../../constants/constants.dart';
+import '../../tweet/view/create_tweet_view.dart';
+import '../../../theme/theme.dart';
 
 class HomeView extends StatefulWidget {
   static route() => MaterialPageRoute(

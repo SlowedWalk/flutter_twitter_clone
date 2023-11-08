@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:twitter_clone/app/api/storage_api.dart';
-import 'package:twitter_clone/app/api/tweet_api.dart';
-import 'package:twitter_clone/app/core/enums/tweet_type_enum.dart';
-import 'package:twitter_clone/app/core/utils.dart';
-import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
-import 'package:twitter_clone/app/model/tweet_model.dart';
+import '../../../api/storage_api.dart';
+import '../../../api/tweet_api.dart';
+import '../../../core/enums/tweet_type_enum.dart';
+import '../../../core/utils.dart';
+import '../../auth/controllers/auth_controller.dart';
+import '../../../model/tweet_model.dart';
 
 final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((ref) {
   return TweetController(

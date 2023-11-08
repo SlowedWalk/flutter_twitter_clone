@@ -2,11 +2,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:twitter_clone/app/common/common.dart';
-import 'package:twitter_clone/app/constants/constants.dart';
-import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
-import 'package:twitter_clone/app/features/tweet/controller/tweet_controller.dart';
-import 'package:twitter_clone/app/theme/theme.dart';
+import '../../../common/common.dart';
+import '../../../constants/constants.dart';
+import '../../auth/controllers/auth_controller.dart';
+import '../controller/tweet_controller.dart';
+import '../../../theme/theme.dart';
 
 class CreateTweetScreen extends ConsumerStatefulWidget {
   static route() =>

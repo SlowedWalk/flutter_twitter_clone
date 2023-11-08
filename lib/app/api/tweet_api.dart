@@ -2,11 +2,11 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:twitter_clone/app/constants/constants.dart';
-import 'package:twitter_clone/app/core/Failure.dart';
-import 'package:twitter_clone/app/core/core.dart';
-import 'package:twitter_clone/app/core/providers.dart';
-import 'package:twitter_clone/app/model/tweet_model.dart';
+import '../constants/constants.dart';
+import '../core/Failure.dart';
+import '../core/core.dart';
+import '../core/providers.dart';
+import '../model/tweet_model.dart';
 
 final tweetAPIProvider = Provider((ref) {
   return TweetAPI(
