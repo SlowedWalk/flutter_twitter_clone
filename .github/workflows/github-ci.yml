@@ -77,6 +77,12 @@ jobs:
           sudo apt-get install zip
           zip -r archive.zip *
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk artefact upload
+          path: "./build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk"
+
       - name: Deploy on Google Drive
         uses: adityak74/google-drive-upload-git-action@main
         with:
