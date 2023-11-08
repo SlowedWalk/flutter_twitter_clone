@@ -81,14 +81,15 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: apk artefact upload
-          path: "./build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk"
+          path: "build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk"
 
       - name: Deploy on Google Drive
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{secrets.DRIVE_CREDENTIALS}}
-          filename: "./build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk"
+          filename: "build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk"
           folderId: ${{secrets.FOLDER_ID}}
+#          folderId: 1PuMPaHJ-OyoF9UYRVj7Hgj2AZWPHk5_F
 #          folderId: 1PuMPaHJ-OyoF9UYRVj7Hgj2AZWPHk5_F
           name: ${{secrets.APP_NAME}}_${{steps.date.outputs.date}}.apk
           overwrite: "true"
