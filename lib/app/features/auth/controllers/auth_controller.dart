@@ -51,7 +51,9 @@ class AuthController extends StateNotifier<bool> {
     state = false;
     response.fold(
       (l) {
-        if(l.message.isNotEmpty) showSnackBar(context, l.message);
+        if(l.message!.isNotEmpty!) {
+          showSnackBar(context, l.message!);
+          }
         },
       (r) async {
         UserModel userModel = UserModel(
@@ -67,7 +69,7 @@ class AuthController extends StateNotifier<bool> {
         );
         final res = await _userAPI.saveUserData(userModel);
         res.fold(
-          (l) => showSnackBar(context, "Error: ${l.message}"),
+          (l) => showSnackBar(context, "Error: ${l!.message!}"),
           (r) {
             showSnackBar(context, "Account created, please login!");
             Navigator.push(context, LoginView.route());
@@ -87,7 +89,7 @@ class AuthController extends StateNotifier<bool> {
     state = false;
     response.fold(
       (l) {
-        if(l.message.isNotEmpty) showSnackBar(context, l.message);
+        if(l!.message!.isNotEmpty!) showSnackBar(context, l.message!);
         },
       (r) {
         showSnackBar(context, "Welcome!");
