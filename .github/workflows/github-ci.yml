@@ -33,6 +33,7 @@ jobs:
 
       - name: Flutter test
         run: |
+          flutter clean
           flutter pub get
           flutter analyze
         # flutter test
