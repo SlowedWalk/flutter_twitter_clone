@@ -35,11 +35,11 @@ jobs:
         run: |
           flutter clean
           flutter pub get
-        #  flutter analyze
+          flutter analyze
         # flutter test
 
-  # jobs 2 : twitter_clone_app_android_build_deploy
-  twitter_clone_app_android_build_deploy:
+  # jobs 2 : twitter_clone_android_app_build_deploy
+  twitter_clone_android_app_build_deploy:
     if: true
     needs: twitter_clone_app_testing
     runs-on: ubuntu-22.04
