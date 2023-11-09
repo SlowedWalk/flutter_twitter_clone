@@ -2,11 +2,12 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:twitter_clone/app/constants/constants.dart';
-import 'package:twitter_clone/app/core/Failure.dart';
+import 'package:twitter_clone/app/constants/appwrite_constants.dart';
 import 'package:twitter_clone/app/core/core.dart';
+import 'package:twitter_clone/app/core/failure.dart';
 import 'package:twitter_clone/app/core/providers.dart';
 import 'package:twitter_clone/app/model/tweet_model.dart';
+
 
 final tweetAPIProvider = Provider((ref) {
   return TweetAPI(
@@ -16,6 +17,7 @@ final tweetAPIProvider = Provider((ref) {
 
 abstract class ITweetAPI {
   FutureEither<Document> shareTweet(Tweet tweet);
+  Future<List<Document>> getTweets();
 }
 
 class TweetAPI implements ITweetAPI {
@@ -39,5 +41,14 @@ class TweetAPI implements ITweetAPI {
     } catch (e, st) {
       return left(Failure(e.toString(), st));
     }
+  }
+
+  @override
+  Future<List<Document>> getTweets() async {
+      final documents = await _db.listDocuments(
+        databaseId: AppWriteConstants.databaseId,
+        collectionId: AppWriteConstants.tweetsCollectionId
+    );
+      return documents.documents;
   }
 }

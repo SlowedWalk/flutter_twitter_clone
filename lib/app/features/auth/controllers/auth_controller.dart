@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:twitter_clone/app/api/auth_api.dart';
 import 'package:twitter_clone/app/api/user_api.dart';
-import 'package:twitter_clone/app/core/utils.dart';
+import 'package:twitter_clone/app/core/core.dart';
 import 'package:twitter_clone/app/features/auth/views/login_view.dart';
 import 'package:twitter_clone/app/features/home/views/home_view.dart';
 import 'package:twitter_clone/app/model/user_model.dart';
@@ -64,10 +64,13 @@ class AuthController extends StateNotifier<bool> {
           isTwitterBlue: false,
         );
         final res = await _userAPI.saveUserData(userModel);
-        res.fold((l) => showSnackBar(context, l.message), (r) {
-          showSnackBar(context, "Account created, please login!");
-          Navigator.push(context, LoginView.route());
-        });
+        res.fold(
+          (l) => showSnackBar(context, l.message),
+          (r) {
+            showSnackBar(context, "Account created, please login!");
+            Navigator.push(context, LoginView.route());
+          }
+        );
       }
     );
   }
@@ -80,7 +83,8 @@ class AuthController extends StateNotifier<bool> {
     state = true;
     final response = await _authAPI.signIn(email: email, password: password);
     state = false;
-    response.fold((l) => showSnackBar(context, l.message),
+    response.fold(
+      (l) => showSnackBar(context, l.message),
       (r) {
         showSnackBar(context, "Welcome!");
         Navigator.push(context, HomeView.route());
