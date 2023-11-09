@@ -10,9 +10,10 @@ import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart
 import 'package:twitter_clone/app/model/tweet_model.dart';
 
 import 'package:twitter_clone/app/core/core.dart';
+import 'package:twitter_clone/app/model/user_model.dart';
 
 
-final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((ref) {
+final tweetControllerProvider = StateNotifierProvider.autoDispose<TweetController, bool>((ref) {
   return TweetController(
       ref: ref,
       tweetAPI: ref.watch(tweetAPIProvider),
@@ -20,8 +21,12 @@ final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((re
   );
 });
 
-final getTweetProvider = FutureProvider((ref) async {
+final getTweetsProvider = FutureProvider.autoDispose((ref) async {
   return ref.watch(tweetControllerProvider.notifier).getTweets();
+});
+
+final getLatestTweetProvider = StreamProvider.autoDispose((ref) {
+  return ref.watch(tweetAPIProvider).getLatestTweet();
 });
 
 class TweetController extends StateNotifier<bool> {
@@ -39,7 +44,53 @@ class TweetController extends StateNotifier<bool> {
     return tweets.map((tweet) => Tweet.fromMap(tweet.data)).toList();
   }
 
-  void shareTweet({ required List<File> images, required String text, required BuildContext context, }) {
+  void likeTweet(Tweet tweet, UserModel user) async {
+    List<String> likes = tweet.likes;
+    
+    if(tweet.likes.contains(user.uid)) {
+      likes.remove(user.uid);
+    } else {
+      likes.add(user.uid);
+    }
+    tweet = tweet.copyWith(likes: likes);
+
+    final res = await _tweetAPI.likeTweet(tweet);
+
+    res.fold((l) => null, (r) => null);
+  }
+
+  void reShareTweet(Tweet tweet, UserModel currentUser, BuildContext context) async {
+    tweet = tweet.copyWith(
+      reTweetedBy: currentUser.username,
+      likes: [],
+      commentIds: [],
+      reSharedCount: tweet.reSharedCount + 1
+    );
+
+    final res = await _tweetAPI.updateReShareCount(tweet);
+
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) async {
+        tweet = tweet.copyWith(
+          id: ID.unique(),
+          reSharedCount: 0,
+          tweetedAt: DateTime.now()
+        );
+        final res2 = await _tweetAPI.shareTweet(tweet);
+        res2.fold(
+          (l) => showSnackBar(context, l.message),
+          (r) => showSnackBar(context, "Retweeted")
+        );
+      }
+    );
+  }
+
+  void shareTweet({
+    required List<File> images,
+    required String text,
+    required BuildContext context })
+  {
     if (text.isEmpty) {
       showSnackBar(context, 'Please enter some text!');
       return;
@@ -59,7 +110,12 @@ class TweetController extends StateNotifier<bool> {
     }
   }
 
-  void _shareImageTweet({ required List<File> images, required String text, required BuildContext context,}) async {
+  void _shareImageTweet({
+    required List<File> images,
+    required String text,
+    required BuildContext context
+  })
+  async {
     state = true;
     final hashtags = _getHashtagFromText(text);
     String link = _getLinkFromText(text);
@@ -76,7 +132,8 @@ class TweetController extends StateNotifier<bool> {
         likes: const [],
         commentIds: const [],
         id: ID.unique(),
-        reSharedCount: 0
+        reSharedCount: 0,
+        reTweetedBy: '',
     );
 
     final response = await _tweetAPI.shareTweet(tweet);
@@ -84,7 +141,11 @@ class TweetController extends StateNotifier<bool> {
     response.fold((l) => showSnackBar(context, l.message), (r) => null);
   }
 
-  void _shareTextTweet({ required String text, required BuildContext context,}) async {
+  void _shareTextTweet({
+    required String text,
+    required BuildContext context
+  })
+  async {
     state = true;
     final hashtags = _getHashtagFromText(text);
     String link = _getLinkFromText(text);
@@ -101,7 +162,8 @@ class TweetController extends StateNotifier<bool> {
         likes: const [],
         commentIds: const [],
         id: ID.unique(),
-        reSharedCount: 0
+        reSharedCount: 0,
+        reTweetedBy: '',
     );
 
     final response = await _tweetAPI.shareTweet(tweet);
