@@ -70,7 +70,7 @@ class TweetCard extends ConsumerWidget {
                           AnyLinkPreview(
                             link: 'https://${tweet.link}',
                             displayDirection: UIDirection.uiDirectionHorizontal,
-                            headers: {"Access-Control-Allow-Origin": "*"},
+                            headers: const {"Access-Control-Allow-Origin": "*"},
                           )
                         ],
                         Container(
