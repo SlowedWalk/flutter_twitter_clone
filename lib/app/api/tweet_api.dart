@@ -7,7 +7,6 @@ import 'package:twitter_clone/app/core/core.dart';
 import 'package:twitter_clone/app/core/failure.dart';
 import 'package:twitter_clone/app/core/providers.dart';
 import 'package:twitter_clone/app/model/tweet_model.dart';
-import 'package:http/http.dart' as http;
 
 final tweetAPIProvider = Provider((ref) {
   return TweetAPI(
