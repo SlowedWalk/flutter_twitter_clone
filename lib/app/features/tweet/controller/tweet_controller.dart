@@ -10,6 +10,7 @@ import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart
 import 'package:twitter_clone/app/model/tweet_model.dart';
 
 import 'package:twitter_clone/app/core/core.dart';
+import 'package:twitter_clone/app/model/user_model.dart';
 
 
 final tweetControllerProvider = StateNotifierProvider.autoDispose<TweetController, bool>((ref) {
@@ -43,7 +44,26 @@ class TweetController extends StateNotifier<bool> {
     return tweets.map((tweet) => Tweet.fromMap(tweet.data)).toList();
   }
 
-  void shareTweet({ required List<File> images, required String text, required BuildContext context, }) {
+  void likeTweet(Tweet tweet, UserModel user) async {
+    List<String> likes = tweet.likes;
+    
+    if(tweet.likes.contains(user.uid)) {
+      likes.remove(user.uid);
+    } else {
+      likes.add(user.uid);
+    }
+    tweet = tweet.copyWith(likes: likes);
+
+    final res = await _tweetAPI.likeTweet(tweet);
+
+    res.fold((l) => null, (r) => null);
+  }
+
+  void shareTweet({
+    required List<File> images,
+    required String text,
+    required BuildContext context })
+  {
     if (text.isEmpty) {
       showSnackBar(context, 'Please enter some text!');
       return;
@@ -63,7 +83,12 @@ class TweetController extends StateNotifier<bool> {
     }
   }
 
-  void _shareImageTweet({ required List<File> images, required String text, required BuildContext context,}) async {
+  void _shareImageTweet({
+    required List<File> images,
+    required String text,
+    required BuildContext context
+  })
+  async {
     state = true;
     final hashtags = _getHashtagFromText(text);
     String link = _getLinkFromText(text);
@@ -88,7 +113,11 @@ class TweetController extends StateNotifier<bool> {
     response.fold((l) => showSnackBar(context, l.message), (r) => null);
   }
 
-  void _shareTextTweet({ required String text, required BuildContext context,}) async {
+  void _shareTextTweet({
+    required String text,
+    required BuildContext context
+  })
+  async {
     state = true;
     final hashtags = _getHashtagFromText(text);
     String link = _getLinkFromText(text);
