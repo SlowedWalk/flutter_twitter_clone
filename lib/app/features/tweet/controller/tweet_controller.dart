@@ -12,7 +12,7 @@ import 'package:twitter_clone/app/model/tweet_model.dart';
 import 'package:twitter_clone/app/core/core.dart';
 
 
-final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((ref) {
+final tweetControllerProvider = StateNotifierProvider.autoDispose<TweetController, bool>((ref) {
   return TweetController(
       ref: ref,
       tweetAPI: ref.watch(tweetAPIProvider),
@@ -20,8 +20,12 @@ final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((re
   );
 });
 
-final getTweetProvider = FutureProvider((ref) async {
+final getTweetsProvider = FutureProvider.autoDispose((ref) async {
   return ref.watch(tweetControllerProvider.notifier).getTweets();
+});
+
+final getLatestTweetProvider = StreamProvider.autoDispose((ref) {
+  return ref.watch(tweetAPIProvider).getLatestTweet();
 });
 
 class TweetController extends StateNotifier<bool> {

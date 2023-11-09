@@ -19,7 +19,7 @@ class TweetCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(userDetailsProvider(tweet.uid)).when(
-        data: (user) {
+      data: (user) {
           return Column(
             children: [
               Row(
@@ -124,7 +124,7 @@ class TweetCard extends ConsumerWidget {
           );
         },
       error: (error, stackTrace) => ErrorText(error: error.toString()),
-      loading: () => const Loader(),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }
