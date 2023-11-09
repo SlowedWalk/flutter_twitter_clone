@@ -52,21 +52,27 @@ class _HomeViewState extends State<HomeView> {
             label: "Home",
             icon: SvgPicture.asset(
               AssetsConstants.homeFilledIcon,
-              color: _pageIndex == 0 ? Pallet.blueColor : Pallet.whiteColor
+              colorFilter: _pageIndex == 0
+                  ? const ColorFilter.mode(Pallet.blueColor, BlendMode.srcIn)
+                  : const ColorFilter.mode(Pallet.whiteColor, BlendMode.srcIn),
             )
           ),
           BottomNavigationBarItem(
             label: "Search",
             icon: SvgPicture.asset(
               AssetsConstants.searchIcon,
-              color: _pageIndex == 1 ? Pallet.blueColor : Pallet.whiteColor
+              colorFilter: _pageIndex == 1
+                  ? const ColorFilter.mode(Pallet.blueColor, BlendMode.srcIn)
+                  : const ColorFilter.mode(Pallet.whiteColor, BlendMode.srcIn),
             )
           ),
           BottomNavigationBarItem(
             label: "Notifications",
             icon: SvgPicture.asset(
               AssetsConstants.notifFilledIcon,
-              color: _pageIndex == 2 ? Pallet.blueColor : Pallet.whiteColor
+              colorFilter: _pageIndex == 2
+                  ? const ColorFilter.mode(Pallet.blueColor, BlendMode.srcIn)
+                  : const ColorFilter.mode(Pallet.whiteColor, BlendMode.srcIn),
             )
           ),
         ],
