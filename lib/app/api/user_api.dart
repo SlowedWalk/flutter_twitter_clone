@@ -2,11 +2,11 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod/riverpod.dart';
-import '../constants/appwrite_constants.dart';
-import '../core/failure.dart';
-import '../core/core.dart';
-import '../core/providers.dart';
-import '../model/user_model.dart';
+import 'package:twitter_clone/app/constants/constants.dart';
+import 'package:twitter_clone/app/core/core.dart';
+import 'package:twitter_clone/app/core/failure.dart';
+import 'package:twitter_clone/app/core/providers.dart';
+import 'package:twitter_clone/app/model/user_model.dart';
 
 final userAPIProvider = Provider((ref) {
   return UserAPI(

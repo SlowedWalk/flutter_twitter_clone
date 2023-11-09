@@ -1,12 +1,12 @@
 import 'package:appwrite/models.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
-import '../../../api/auth_api.dart';
-import '../../../api/user_api.dart';
-import '../../../core/utils.dart';
-import '../views/login_view.dart';
-import '../../home/views/home_view.dart';
-import '../../../model/user_model.dart';
+import 'package:twitter_clone/app/api/auth_api.dart';
+import 'package:twitter_clone/app/api/user_api.dart';
+import 'package:twitter_clone/app/core/core.dart';
+import 'package:twitter_clone/app/features/auth/views/login_view.dart';
+import 'package:twitter_clone/app/features/home/views/home_view.dart';
+import 'package:twitter_clone/app/model/user_model.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {

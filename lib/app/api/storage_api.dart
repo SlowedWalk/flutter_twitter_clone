@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../constants/appwrite_constants.dart';
-import '../core/providers.dart';
+import 'package:twitter_clone/app/constants/constants.dart';
+import 'package:twitter_clone/app/core/providers.dart';
 
 final storageAPIProvider = Provider((ref) {
   return StorageAPI(

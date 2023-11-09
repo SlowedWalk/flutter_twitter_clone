@@ -1,6 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:riverpod/riverpod.dart';
-import '../constants/constants.dart';
+import 'package:twitter_clone/app/constants/constants.dart';
 
 final appwriteClientProvider = Provider((ref) {
   Client client = Client();

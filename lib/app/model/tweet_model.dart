@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/enums/tweet_type_enum.dart';
+import 'package:twitter_clone/app/core/enums/tweet_type_enum.dart';
 
 @immutable
 class Tweet {
