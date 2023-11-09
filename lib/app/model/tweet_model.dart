@@ -14,6 +14,7 @@ class Tweet {
   final List<String> commentIds;
   final String id;
   final int reSharedCount;
+  final String reTweetedBy;
 
 //<editor-fold desc="Data Methods">
   const Tweet({
@@ -28,6 +29,7 @@ class Tweet {
     required this.commentIds,
     required this.id,
     required this.reSharedCount,
+    required this.reTweetedBy,
   });
 
   @override
@@ -45,7 +47,8 @@ class Tweet {
           likes == other.likes &&
           commentIds == other.commentIds &&
           id == other.id &&
-          reSharedCount == other.reSharedCount);
+          reSharedCount == other.reSharedCount &&
+          reTweetedBy == other.reTweetedBy);
 
   @override
   int get hashCode =>
@@ -59,11 +62,12 @@ class Tweet {
       likes.hashCode ^
       commentIds.hashCode ^
       id.hashCode ^
-      reSharedCount.hashCode;
+      reSharedCount.hashCode ^
+      reTweetedBy.hashCode;
 
   @override
   String toString() {
-    return 'Tweet{ uid: $uid, text: $text, hashtags: $hashtags, link: $link, imagesLinks: $imagesLinks, tweetType: $tweetType, tweetedAt: $tweetedAt, likes: $likes, commentIds: $commentIds, id: $id, reSharedCount: $reSharedCount,}';
+    return 'Tweet{ uid: $uid, text: $text, hashtags: $hashtags, link: $link, imagesLinks: $imagesLinks, tweetType: $tweetType, tweetedAt: $tweetedAt, likes: $likes, commentIds: $commentIds, id: $id, reSharedCount: $reSharedCount, reTweetedBy: $reTweetedBy}';
   }
 
   Tweet copyWith({
@@ -78,6 +82,7 @@ class Tweet {
     List<String>? commentIds,
     String? id,
     int? reSharedCount,
+    String? reTweetedBy,
   }) {
     return Tweet(
       uid: uid ?? this.uid,
@@ -91,6 +96,7 @@ class Tweet {
       commentIds: commentIds ?? this.commentIds,
       id: id ?? this.id,
       reSharedCount: reSharedCount ?? this.reSharedCount,
+      reTweetedBy: reTweetedBy ?? this.reTweetedBy,
     );
   }
 
@@ -106,6 +112,7 @@ class Tweet {
       'likes': likes,
       'commentIds': commentIds,
       'reSharedCount': reSharedCount,
+      'reTweetedBy': reTweetedBy,
     };
   }
 
@@ -122,6 +129,7 @@ class Tweet {
       commentIds: List<String>.from(map['commentIds']),
       id: map['\$id'] ?? '',
       reSharedCount: map['reSharedCount']?.toInt() ?? 0,
+      reTweetedBy: map['reTweetedBy'] ?? '',
     );
   }
 

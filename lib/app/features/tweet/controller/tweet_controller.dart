@@ -59,6 +59,33 @@ class TweetController extends StateNotifier<bool> {
     res.fold((l) => null, (r) => null);
   }
 
+  void reShareTweet(Tweet tweet, UserModel currentUser, BuildContext context) async {
+    tweet = tweet.copyWith(
+      reTweetedBy: currentUser.username,
+      likes: [],
+      commentIds: [],
+      reSharedCount: tweet.reSharedCount + 1
+    );
+
+    final res = await _tweetAPI.updateReShareCount(tweet);
+
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) async {
+        tweet = tweet.copyWith(
+          id: ID.unique(),
+          reSharedCount: 0,
+          tweetedAt: DateTime.now()
+        );
+        final res2 = await _tweetAPI.shareTweet(tweet);
+        res2.fold(
+          (l) => showSnackBar(context, l.message),
+          (r) => showSnackBar(context, "Retweeted")
+        );
+      }
+    );
+  }
+
   void shareTweet({
     required List<File> images,
     required String text,
@@ -105,7 +132,8 @@ class TweetController extends StateNotifier<bool> {
         likes: const [],
         commentIds: const [],
         id: ID.unique(),
-        reSharedCount: 0
+        reSharedCount: 0,
+        reTweetedBy: '',
     );
 
     final response = await _tweetAPI.shareTweet(tweet);
@@ -134,7 +162,8 @@ class TweetController extends StateNotifier<bool> {
         likes: const [],
         commentIds: const [],
         id: ID.unique(),
-        reSharedCount: 0
+        reSharedCount: 0,
+        reTweetedBy: '',
     );
 
     final response = await _tweetAPI.shareTweet(tweet);
