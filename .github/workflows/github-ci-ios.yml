@@ -30,6 +30,7 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter build ios --release --no-codesign
+      - run: ls -lah build/
 
       - name: Get Today Date
         id: date
@@ -51,6 +52,12 @@ jobs:
       run:
         working-directory: .
     steps:
+      - name: Archive Files
+        run: |
+          brew install zip
+          zip -r archive.zip build/*
+
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -68,4 +75,5 @@ jobs:
           name: ${{secrets.APP_NAME}}_${{steps.date.outputs.date}}
           overwrite: "true"
           mimeType: "application/vnd.android.package-archive"
+
 
