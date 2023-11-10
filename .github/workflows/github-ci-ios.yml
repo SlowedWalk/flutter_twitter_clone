@@ -1,0 +1,59 @@
+name: build_and_upload 🏗️
+
+env:
+  VSCODE_VERSION: "1.84.0"
+  DART_VERSION: "3.1.5"
+  DART_CHANNEL: "stable"
+  FLUTTER_VERSION: "3.13.9"
+  FLUTTER_CHANNEL: "stable"
+  JAVA_VERSION: "17.x"
+  JAVA_DISTRIBUTION: "zulu"
+
+on:
+  push:
+    branches:
+      - "main"
+
+  # job 1 : twitter_clone_app_testing
+jobs:
+  build_deploy:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: ${{env.FLUTTER_CHANNEL}}
+          architecture: x64
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build ios --release --no-codesign
+
+      - name: Get Today Date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Archive Files
+        run: |
+          brew install zip
+          zip -r archive.zip *
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk artefact upload
+          path: "archive.zip"
+
+      - name: Deploy on Google Drive
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{secrets.DRIVE_CREDENTIALS}}
+          filename: "archive.zip"
+          folderId: ${{secrets.FOLDER_ID}}
+          #          folderId: 1PuMPaHJ-OyoF9UYRVj7Hgj2AZWPHk5_F
+          #          folderId: 1PuMPaHJ-OyoF9UYRVj7Hgj2AZWPHk5_F
+          name: ${{secrets.APP_NAME}}_${{steps.date.outputs.date}}
+          overwrite: "true"
+          mimeType: "application/vnd.android.package-archive"
