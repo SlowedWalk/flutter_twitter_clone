@@ -68,3 +68,4 @@ jobs:
           name: ${{secrets.APP_NAME}}_${{steps.date.outputs.date}}
           overwrite: "true"
           mimeType: "application/vnd.android.package-archive"
+
