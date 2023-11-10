@@ -29,6 +29,7 @@ class TweetList extends ConsumerWidget {
                 
                 final tweetId = data.events[0]
                     .substring(startingPoint + 10, endPoint);
+                final tweetId = data.events[0].substring(startingPoint+10, endPoint);
 
                 var tweet = tweets
                     .where((element) => element.id == tweetId)
