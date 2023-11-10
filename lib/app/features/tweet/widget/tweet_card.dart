@@ -49,13 +49,13 @@ class TweetCard extends ConsumerWidget {
                                     SvgPicture.asset(
                                       AssetsConstants.retweetIcon,
                                       colorFilter: const ColorFilter.mode(
-                                          Pallet.greyColor,
-                                          BlendMode.src
+                                          Pallet.blueColor,
+                                          BlendMode.srcIn
                                       ),
                                       height: 20,
                                     ),
                                      const SizedBox(width: 2),
-                                    Text('${tweet.reTweetedBy} retweeted',
+                                    Text(' ${tweet.reTweetedBy} retweeted',
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
@@ -68,10 +68,13 @@ class TweetCard extends ConsumerWidget {
                                 children: [
                                   Container(
                                     margin: const EdgeInsets.only(right: 5),
-                                    child: Text(user.username,
+                                    child: Text(
+                                        user.username,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 18)),
+                                            fontSize: 18
+                                        )
+                                    ),
                                   ),
                                   Text(
                                       '@${user.username} . ${timeago.format(tweet.tweetedAt, locale: 'en_short')}',
@@ -83,13 +86,14 @@ class TweetCard extends ConsumerWidget {
                               // replied to
                               HashtagText(text: tweet.text),
                               if (tweet.tweetType == TweetType.image)
-                                CarouselImage(imageLinks: tweet.imagesLinks),
+                                CarouselImage(imageLinks: tweet.imageLinks),
                               if (tweet.link.isNotEmpty) ...[
                                 const SizedBox(height: 4),
                                 AnyLinkPreview(
                                     link: 'https://${tweet.link}',
                                     displayDirection:
-                                        UIDirection.uiDirectionHorizontal)
+                                        UIDirection.uiDirectionHorizontal
+                                )
                               ],
                               Container(
                                 margin:
@@ -102,14 +106,16 @@ class TweetCard extends ConsumerWidget {
                                         pathName: AssetsConstants.viewsIcon,
                                         text: (tweet.commentIds.length +
                                                 tweet.reSharedCount.bitLength +
-                                                tweet.likes.length)
-                                            .toString(),
-                                        onTap: () {}),
+                                                tweet.likes.length
+                                        ).toString(),
+                                        onTap: () {}
+                                    ),
                                     TweetIconBtn(
                                         pathName: AssetsConstants.commentIcon,
                                         text:
                                             tweet.commentIds.length.toString(),
-                                        onTap: () {}),
+                                        onTap: () {}
+                                    ),
                                     TweetIconBtn(
                                         pathName: AssetsConstants.retweetIcon,
                                         text: tweet.reSharedCount.toString(),
@@ -119,7 +125,8 @@ class TweetCard extends ConsumerWidget {
                                                   .notifier)
                                               .reShareTweet(
                                                   tweet, currentUser, context);
-                                        }),
+                                        }
+                                        ),
                                     LikeButton(
                                       size: 24,
                                       onTap: (isLiked) async {

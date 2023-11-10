@@ -126,7 +126,7 @@ class TweetController extends StateNotifier<bool> {
         text: text,
         hashtags: hashtags,
         link: link,
-        imagesLinks: imageLinks,
+        imageLinks: imageLinks,
         tweetType: TweetType.image,
         tweetedAt: DateTime.timestamp(),
         likes: const [],
@@ -138,7 +138,10 @@ class TweetController extends StateNotifier<bool> {
 
     final response = await _tweetAPI.shareTweet(tweet);
     state = false;
-    response.fold((l) => showSnackBar(context, l.message), (r) => null);
+    response.fold(
+            (l) => showSnackBar(context, l.message),
+            (r) => showSnackBar(context, "Your tweet is life 👌")
+    );
   }
 
   void _shareTextTweet({
@@ -156,7 +159,7 @@ class TweetController extends StateNotifier<bool> {
         text: text,
         hashtags: hashtags,
         link: link,
-        imagesLinks: const [],
+        imageLinks: const [],
         tweetType: TweetType.text,
         tweetedAt: DateTime.timestamp(),
         likes: const [],
