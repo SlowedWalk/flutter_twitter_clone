@@ -58,6 +58,7 @@ jobs:
           sudo apt-get install zip
           zip -r archive.zip build/*
 
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -74,4 +75,10 @@ jobs:
           #          folderId: 1PuMPaHJ-OyoF9UYRVj7Hgj2AZWPHk5_F
           name: ${{secrets.APP_NAME}}_${{steps.date.outputs.date}}
           overwrite: "true"
+<<<<<<< HEAD
           mimeType: "application/vnd.android.package-archive"
+=======
+          mimeType: "application/vnd.android.package-archive"
+
+
+>>>>>>> 3745e115d8b983880bdf28b49202e620222400b0
