@@ -6,9 +6,8 @@ import 'package:twitter_clone/app/features/tweet/view/create_tweet_view.dart';
 import 'package:twitter_clone/app/theme/theme.dart';
 
 class HomeView extends StatefulWidget {
-  static route() => MaterialPageRoute(
-    builder: (context) => const HomeView()
-  );
+  static route() => MaterialPageRoute(builder: (context) => const HomeView());
+
   const HomeView({super.key});
 
   @override
@@ -37,11 +36,17 @@ class _HomeViewState extends State<HomeView> {
         index: _pageIndex,
         children: UIConstants.bottomTabBarPages,
       ),
-      floatingActionButton: _pageIndex == 0 ? FloatingActionButton(
-        onPressed: onCreateTweet,
-        backgroundColor: Pallet.blueColor,
-        child: const Icon(Icons.add, color: Pallet.whiteColor, size: 18,),
-      ) : null,
+      floatingActionButton: _pageIndex == 0
+          ? FloatingActionButton(
+              onPressed: onCreateTweet,
+              backgroundColor: Pallet.blueColor,
+              child: const Icon(
+                Icons.add,
+                color: Pallet.whiteColor,
+                size: 18,
+              ),
+            )
+          : null,
       bottomNavigationBar: CupertinoTabBar(
         height: 70,
         backgroundColor: Pallet.backgroundColor,
@@ -50,30 +55,64 @@ class _HomeViewState extends State<HomeView> {
         items: [
           BottomNavigationBarItem(
             label: "Home",
-            icon: SvgPicture.asset(
-              AssetsConstants.homeFilledIcon,
-              colorFilter: _pageIndex == 0
-                  ? const ColorFilter.mode(Pallet.blueColor, BlendMode.srcIn)
-                  : const ColorFilter.mode(Pallet.whiteColor, BlendMode.srcIn),
-            )
+            icon: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(bottom: 8),
+              decoration: _pageIndex == 0
+                  ? const BoxDecoration(
+                      border: Border(
+                          top: BorderSide(
+                              color: Pallet.blueColor,
+                              width: 2)
+                      )
+                  )
+                    : null,
+                child: SvgPicture.asset(
+                  AssetsConstants.homeFilledIcon,
+                  colorFilter: _pageIndex == 0
+                      ? const ColorFilter.mode(
+                          Pallet.blueColor, BlendMode.srcIn)
+                      : const ColorFilter.mode(
+                          Pallet.whiteColor, BlendMode.srcIn),
+                )),
           ),
           BottomNavigationBarItem(
-            label: "Search",
-            icon: SvgPicture.asset(
-              AssetsConstants.searchIcon,
-              colorFilter: _pageIndex == 1
-                  ? const ColorFilter.mode(Pallet.blueColor, BlendMode.srcIn)
-                  : const ColorFilter.mode(Pallet.whiteColor, BlendMode.srcIn),
-            )
-          ),
+              label: "Search",
+              icon: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 8),
+                decoration: _pageIndex == 1
+                    ? const BoxDecoration(
+                        border: Border(
+                            top: BorderSide(color: Pallet.blueColor, width: 2)))
+                    : null,
+                child: SvgPicture.asset(
+                  AssetsConstants.searchIcon,
+                  colorFilter: _pageIndex == 1
+                      ? const ColorFilter.mode(
+                          Pallet.blueColor, BlendMode.srcIn)
+                      : const ColorFilter.mode(
+                          Pallet.whiteColor, BlendMode.srcIn),
+                ),
+              )),
           BottomNavigationBarItem(
             label: "Notifications",
-            icon: SvgPicture.asset(
-              AssetsConstants.notifFilledIcon,
-              colorFilter: _pageIndex == 2
-                  ? const ColorFilter.mode(Pallet.blueColor, BlendMode.srcIn)
-                  : const ColorFilter.mode(Pallet.whiteColor, BlendMode.srcIn),
-            )
+            icon: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 8),
+                decoration: _pageIndex == 2
+                    ? const BoxDecoration(
+                        border: Border(
+                            top: BorderSide(color: Pallet.blueColor, width: 2)))
+                    : null,
+                child: SvgPicture.asset(
+                  AssetsConstants.notifFilledIcon,
+                  colorFilter: _pageIndex == 2
+                      ? const ColorFilter.mode(
+                          Pallet.blueColor, BlendMode.srcIn)
+                      : const ColorFilter.mode(
+                          Pallet.whiteColor, BlendMode.srcIn),
+                )),
           ),
         ],
       ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:twitter_clone/app/core/enums/tweet_type_enum.dart';
 
 @immutable
@@ -7,7 +7,7 @@ class Tweet {
   final String text;
   final List<String> hashtags;
   final String link;
-  final List<String> imagesLinks;
+  final List<String> imageLinks;
   final TweetType tweetType;
   final DateTime tweetedAt;
   final List<String> likes;
@@ -15,6 +15,7 @@ class Tweet {
   final String id;
   final int reSharedCount;
   final String reTweetedBy;
+  final String repliedTo;
 
 //<editor-fold desc="Data Methods">
   const Tweet({
@@ -22,7 +23,7 @@ class Tweet {
     required this.text,
     required this.hashtags,
     required this.link,
-    required this.imagesLinks,
+    required this.imageLinks,
     required this.tweetType,
     required this.tweetedAt,
     required this.likes,
@@ -30,6 +31,7 @@ class Tweet {
     required this.id,
     required this.reSharedCount,
     required this.reTweetedBy,
+    required this.repliedTo,
   });
 
   @override
@@ -39,16 +41,18 @@ class Tweet {
           runtimeType == other.runtimeType &&
           uid == other.uid &&
           text == other.text &&
-          hashtags == other.hashtags &&
+          listEquals(other.hashtags, hashtags) &&
           link == other.link &&
-          imagesLinks == other.imagesLinks &&
+          listEquals(other.imageLinks, imageLinks) &&
           tweetType == other.tweetType &&
           tweetedAt == other.tweetedAt &&
-          likes == other.likes &&
-          commentIds == other.commentIds &&
+          listEquals(other.likes, likes) &&
+          listEquals(other.commentIds, commentIds) &&
           id == other.id &&
           reSharedCount == other.reSharedCount &&
-          reTweetedBy == other.reTweetedBy);
+          reTweetedBy == other.reTweetedBy &&
+          repliedTo == other.repliedTo
+      );
 
   @override
   int get hashCode =>
@@ -56,18 +60,19 @@ class Tweet {
       text.hashCode ^
       hashtags.hashCode ^
       link.hashCode ^
-      imagesLinks.hashCode ^
+      imageLinks.hashCode ^
       tweetType.hashCode ^
       tweetedAt.hashCode ^
       likes.hashCode ^
       commentIds.hashCode ^
       id.hashCode ^
       reSharedCount.hashCode ^
-      reTweetedBy.hashCode;
+      reTweetedBy.hashCode ^
+      repliedTo.hashCode;
 
   @override
   String toString() {
-    return 'Tweet{ uid: $uid, text: $text, hashtags: $hashtags, link: $link, imagesLinks: $imagesLinks, tweetType: $tweetType, tweetedAt: $tweetedAt, likes: $likes, commentIds: $commentIds, id: $id, reSharedCount: $reSharedCount, reTweetedBy: $reTweetedBy}';
+    return 'Tweet{ uid: $uid, text: $text, hashtags: $hashtags, link: $link, imageLinks: $imageLinks, tweetType: $tweetType, tweetedAt: $tweetedAt, likes: $likes, commentIds: $commentIds, id: $id, reSharedCount: $reSharedCount, reTweetedBy: $reTweetedBy, repliedTo: $repliedTo}';
   }
 
   Tweet copyWith({
@@ -75,7 +80,7 @@ class Tweet {
     String? text,
     List<String>? hashtags,
     String? link,
-    List<String>? imagesLinks,
+    List<String>? imageLinks,
     TweetType? tweetType,
     DateTime? tweetedAt,
     List<String>? likes,
@@ -83,13 +88,14 @@ class Tweet {
     String? id,
     int? reSharedCount,
     String? reTweetedBy,
+    String? repliedTo,
   }) {
     return Tweet(
       uid: uid ?? this.uid,
       text: text ?? this.text,
       hashtags: hashtags ?? this.hashtags,
       link: link ?? this.link,
-      imagesLinks: imagesLinks ?? this.imagesLinks,
+      imageLinks: imageLinks ?? this.imageLinks,
       tweetType: tweetType ?? this.tweetType,
       tweetedAt: tweetedAt ?? this.tweetedAt,
       likes: likes ?? this.likes,
@@ -97,6 +103,7 @@ class Tweet {
       id: id ?? this.id,
       reSharedCount: reSharedCount ?? this.reSharedCount,
       reTweetedBy: reTweetedBy ?? this.reTweetedBy,
+      repliedTo: repliedTo ?? this.repliedTo,
     );
   }
 
@@ -106,13 +113,14 @@ class Tweet {
       'text': text,
       'hashtags': hashtags,
       'link': link,
-      'imagesLinks': imagesLinks,
+      'imageLinks': imageLinks,
       'tweetType': tweetType.type,
       'tweetedAt': tweetedAt.millisecondsSinceEpoch,
       'likes': likes,
       'commentIds': commentIds,
       'reSharedCount': reSharedCount,
       'reTweetedBy': reTweetedBy,
+      'repliedTo': repliedTo,
     };
   }
 
@@ -122,7 +130,7 @@ class Tweet {
       text: map['text'] ?? '',
       hashtags: List<String>.from(map['hashtags']),
       link: map['link'] ?? '',
-      imagesLinks: List<String>.from(map['imagesLinks']),
+      imageLinks: List<String>.from(map['imageLinks']),
       tweetType: (map['tweetType'] as String).toTweetTypeEnum(),
       tweetedAt: DateTime.fromMillisecondsSinceEpoch(map['tweetedAt']),
       likes: List<String>.from(map['likes']),
@@ -130,6 +138,7 @@ class Tweet {
       id: map['\$id'] ?? '',
       reSharedCount: map['reSharedCount']?.toInt() ?? 0,
       reTweetedBy: map['reTweetedBy'] ?? '',
+      repliedTo: map['repliedTo'] ?? '',
     );
   }
 

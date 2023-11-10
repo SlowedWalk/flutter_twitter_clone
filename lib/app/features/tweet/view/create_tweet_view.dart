@@ -33,13 +33,15 @@ class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   }
 
   void shareTweet() {
-    ref.read(tweetControllerProvider.notifier)
-        .shareTweet(
-        images: images,
-        text: tweetTextController.text,
-        context: context
+    showSnackBar(context, "Publishing your tweet");
+    ref.read(tweetControllerProvider.notifier).shareTweet(
+      images: images,
+      text: tweetTextController.text,
+      context: context,
+      repliedTo: ''
     );
-    Navigator.pop(context);
+    Future.delayed(const Duration(seconds: 3))
+        .then((value) => Navigator.pop(context));
   }
 
   void onPickImage() async {
@@ -55,6 +57,7 @@ class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+          tooltip: "Close",
           onPressed: () {
             Navigator.pop(context);
           },
