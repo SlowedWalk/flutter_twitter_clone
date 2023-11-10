@@ -1,4 +1,4 @@
-name: build_and_upload 🏗️
+name: build and upload ios 🏗️
 
 env:
   VSCODE_VERSION: "1.84.0"
@@ -33,13 +33,24 @@ jobs:
 
       - name: Get Today Date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: | 
+          echo "::set-output name=date::$(date +'%Y-%m-%d')"
+          ls -la build
 
       - name: Archive Files
         run: |
           brew install zip
+          brew install tree
           zip -r archive.zip *
-
+          tree build
+  deploy:
+    if: true
+    needs: build_deploy
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: .
+    steps:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -57,3 +68,4 @@ jobs:
           name: ${{secrets.APP_NAME}}_${{steps.date.outputs.date}}
           overwrite: "true"
           mimeType: "application/vnd.android.package-archive"
+

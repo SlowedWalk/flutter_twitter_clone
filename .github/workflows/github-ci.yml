@@ -1,4 +1,4 @@
-name: build_and_upload 🏗️
+name: build and upload android🏗️
 
 env:
   VSCODE_VERSION: "1.84.0"
@@ -12,7 +12,7 @@ env:
 on:
   push:
     branches:
-      - "main"
+      - "xxx"
 
 jobs:
   # job 1 : twitter_clone_app_testing
@@ -71,11 +71,13 @@ jobs:
           flutter pub get
           flutter build apk --release --split-per-abi --obfuscate --split-debug-info=./build/app/outputs/symbols
 
-#      - name: Archive Files
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install zip
-#          zip -r archive.zip *
+      - name: Archive Files
+        run: |
+          sudo apt-get update
+          sudo apt-get install zip
+          sudo apt install tree
+          zip -r archive.zip *
+          tree build
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
