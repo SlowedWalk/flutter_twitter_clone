@@ -37,7 +37,8 @@ class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
     ref.read(tweetControllerProvider.notifier).shareTweet(
       images: images,
       text: tweetTextController.text,
-      context: context
+      context: context,
+      repliedTo: ''
     );
     Future.delayed(const Duration(seconds: 3))
         .then((value) => Navigator.pop(context));
@@ -56,6 +57,7 @@ class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+          tooltip: "Close",
           onPressed: () {
             Navigator.pop(context);
           },

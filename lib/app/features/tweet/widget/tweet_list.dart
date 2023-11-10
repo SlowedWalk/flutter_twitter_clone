@@ -27,7 +27,8 @@ class TweetList extends ConsumerWidget {
                 final startingPoint = data.events[0].lastIndexOf('documents.');
                 final endPoint = data.events[0].lastIndexOf('.update');
                 
-                final tweetId = data.events[0].substring(startingPoint+10, endPoint);
+                final tweetId = data.events[0]
+                    .substring(startingPoint + 10, endPoint);
 
                 var tweet = tweets
                     .where((element) => element.id == tweetId)

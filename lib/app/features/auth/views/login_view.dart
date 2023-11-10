@@ -55,12 +55,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         AuthField(
                           controller: emailController,
                           hintText: 'Email',
+                          inputType: 'email',
                         ),
                         const SizedBox(height: 25),
                         // textfeild 1
                         AuthField(
                           controller: passwordController,
                           hintText: 'Password',
+                          inputType: 'password',
                         ),
                         const SizedBox(height: 40),
                         // button

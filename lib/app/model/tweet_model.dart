@@ -15,6 +15,7 @@ class Tweet {
   final String id;
   final int reSharedCount;
   final String reTweetedBy;
+  final String repliedTo;
 
 //<editor-fold desc="Data Methods">
   const Tweet({
@@ -30,6 +31,7 @@ class Tweet {
     required this.id,
     required this.reSharedCount,
     required this.reTweetedBy,
+    required this.repliedTo,
   });
 
   @override
@@ -48,7 +50,9 @@ class Tweet {
           listEquals(other.commentIds, commentIds) &&
           id == other.id &&
           reSharedCount == other.reSharedCount &&
-          reTweetedBy == other.reTweetedBy);
+          reTweetedBy == other.reTweetedBy &&
+          repliedTo == other.repliedTo
+      );
 
   @override
   int get hashCode =>
@@ -63,11 +67,12 @@ class Tweet {
       commentIds.hashCode ^
       id.hashCode ^
       reSharedCount.hashCode ^
-      reTweetedBy.hashCode;
+      reTweetedBy.hashCode ^
+      repliedTo.hashCode;
 
   @override
   String toString() {
-    return 'Tweet{ uid: $uid, text: $text, hashtags: $hashtags, link: $link, imageLinks: $imageLinks, tweetType: $tweetType, tweetedAt: $tweetedAt, likes: $likes, commentIds: $commentIds, id: $id, reSharedCount: $reSharedCount, reTweetedBy: $reTweetedBy}';
+    return 'Tweet{ uid: $uid, text: $text, hashtags: $hashtags, link: $link, imageLinks: $imageLinks, tweetType: $tweetType, tweetedAt: $tweetedAt, likes: $likes, commentIds: $commentIds, id: $id, reSharedCount: $reSharedCount, reTweetedBy: $reTweetedBy, repliedTo: $repliedTo}';
   }
 
   Tweet copyWith({
@@ -83,6 +88,7 @@ class Tweet {
     String? id,
     int? reSharedCount,
     String? reTweetedBy,
+    String? repliedTo,
   }) {
     return Tweet(
       uid: uid ?? this.uid,
@@ -97,6 +103,7 @@ class Tweet {
       id: id ?? this.id,
       reSharedCount: reSharedCount ?? this.reSharedCount,
       reTweetedBy: reTweetedBy ?? this.reTweetedBy,
+      repliedTo: repliedTo ?? this.repliedTo,
     );
   }
 
@@ -113,6 +120,7 @@ class Tweet {
       'commentIds': commentIds,
       'reSharedCount': reSharedCount,
       'reTweetedBy': reTweetedBy,
+      'repliedTo': repliedTo,
     };
   }
 
@@ -130,6 +138,7 @@ class Tweet {
       id: map['\$id'] ?? '',
       reSharedCount: map['reSharedCount']?.toInt() ?? 0,
       reTweetedBy: map['reTweetedBy'] ?? '',
+      repliedTo: map['repliedTo'] ?? '',
     );
   }
 
