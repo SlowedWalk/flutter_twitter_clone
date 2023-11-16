@@ -20,7 +20,6 @@ String getNameFromEmail(String email) {
 }
 
 Future<List<File>> pickImages() async {
-  log("picking images");
   List<File> images = [];
   final ImagePicker picker = ImagePicker();
   final imageFiles = await picker.pickMultiImage();
@@ -32,4 +31,13 @@ Future<List<File>> pickImages() async {
   }
   images.map((img) => log("Image: ${img.uri}"));
   return images;
+}
+
+Future<File?> pickImage() async {
+  final ImagePicker picker = ImagePicker();
+  final imageFile = await picker.pickImage(source: ImageSource.gallery);
+  if (imageFile != null) {
+    return File(imageFile.path);
+  }
+  return null;
 }

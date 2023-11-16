@@ -42,6 +42,7 @@ class _ExploreViewState extends ConsumerState<ExploreView> {
                 isShowUsers = true;
               });
             },
+            autofocus: true,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(10).copyWith(left: 20),
               fillColor: Pallet.searchBarColor,
