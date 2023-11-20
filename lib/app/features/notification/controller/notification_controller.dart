@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:riverpod/riverpod.dart';
 import 'package:twitter_clone/app/api/notification_api.dart';
 import 'package:twitter_clone/app/core/enums/notification_type_enum.dart';
-import 'package:twitter_clone/app/core/utils.dart';
 import 'package:twitter_clone/app/model/notification_model.dart';
 
 final notificationControllerProvider =
