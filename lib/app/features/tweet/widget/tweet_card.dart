@@ -42,7 +42,8 @@ class TweetCard extends ConsumerWidget {
                             margin: const EdgeInsets.all(10),
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.push(context, ProfileView.route(user));
+                                Navigator.push(
+                                    context, ProfileView.route(user));
                               },
                               child: CircleAvatar(
                                 backgroundImage: NetworkImage(user.profilePic),
@@ -89,41 +90,38 @@ class TweetCard extends ConsumerWidget {
                                             fontSize: 16)),
                                   ],
                                 ),
-                                if(tweet.repliedTo.isNotEmpty)
-                                  ref.watch(getTweetByIdProvider(tweet.repliedTo)).when(
-                                      data: (repliedToTweet) {
-                                        final repliedToUser = ref.watch(
-                                            userDetailsProvider(
-                                                repliedToTweet.uid
-                                            )
-                                        ).value;
-                                        return RichText(
-                                            text: TextSpan(
-                                                text: 'Replying to',
-                                                style: const TextStyle(
-                                                    color: Pallet.greyColor,
-                                                    fontSize: 16
-                                                ),
-                                                children: [
+                                if (tweet.repliedTo.isNotEmpty)
+                                  ref
+                                      .watch(
+                                          getTweetByIdProvider(tweet.repliedTo))
+                                      .when(
+                                          data: (repliedToTweet) {
+                                            final repliedToUser = ref
+                                                .watch(userDetailsProvider(
+                                                    repliedToTweet.uid))
+                                                .value;
+                                            return RichText(
+                                                text: TextSpan(
+                                                    text: 'Replying to',
+                                                    style: const TextStyle(
+                                                        color: Pallet.greyColor,
+                                                        fontSize: 16),
+                                                    children: [
                                                   TextSpan(
-                                                    text: ' @${repliedToUser?.username}',
+                                                    text:
+                                                        ' @${repliedToUser?.username}',
                                                     style: const TextStyle(
                                                         color: Pallet.blueColor,
-                                                        fontSize: 16
-                                                    ),
+                                                        fontSize: 16),
                                                   ),
-                                                ]
-                                            )
-                                        );
-                                      },
-                                      error: (error, stackTrace) => ErrorText(
-                                          error: error.toString()
-                                      ),
-                                      loading: () => const Center(
-                                        child: CircularProgressIndicator()
-                                      )
-                                  ),
-
+                                                ]));
+                                          },
+                                          error: (error, stackTrace) =>
+                                              ErrorText(
+                                                  error: error.toString()),
+                                          loading: () => const Center(
+                                              child:
+                                                  CircularProgressIndicator())),
                                 HashtagText(text: tweet.text),
                                 if (tweet.tweetType == TweetType.image)
                                   CarouselImage(imageLinks: tweet.imageLinks),

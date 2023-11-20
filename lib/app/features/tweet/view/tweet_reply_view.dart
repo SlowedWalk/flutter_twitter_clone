@@ -30,22 +30,23 @@ class TweetReplyScreen extends ConsumerWidget {
                       data: (data) {
                         final latestTweet = Tweet.fromMap(data.payload);
                         bool isTweetAlreadyPresent = false;
-                        for(final tweetModel in tweets) {
-                          if(tweetModel.id == latestTweet.id) {
+                        for (final tweetModel in tweets) {
+                          if (tweetModel.id == latestTweet.id) {
                             isTweetAlreadyPresent = true;
                             break;
                           }
                         }
-                        if(!isTweetAlreadyPresent && latestTweet.repliedTo == tweet.id) {
+                        if (!isTweetAlreadyPresent &&
+                            latestTweet.repliedTo == tweet.id) {
                           if (data.events.contains(
                               'databases.*.collections.${AppWriteConstants.tweetsCollectionId}.documents.*.create')) {
                             tweets.insert(0, Tweet.fromMap(data.payload));
                           } else if (data.events.contains(
                               'databases.*.collections.${AppWriteConstants.tweetsCollectionId}.documents.*.update')) {
                             final startingPoint =
-                            data.events[0].lastIndexOf('documents.');
+                                data.events[0].lastIndexOf('documents.');
                             final endPoint =
-                            data.events[0].lastIndexOf('.update');
+                                data.events[0].lastIndexOf('.update');
 
                             final tweetId = data.events[0]
                                 .substring(startingPoint + 10, endPoint);
@@ -54,8 +55,8 @@ class TweetReplyScreen extends ConsumerWidget {
                                 .where((element) => element.id == tweetId)
                                 .first;
                             final tweetIndex = tweets.indexOf(tweet);
-                            tweets
-                                .removeWhere((element) => element.id == tweetId);
+                            tweets.removeWhere(
+                                (element) => element.id == tweetId);
                             tweet = Tweet.fromMap(data.payload);
                             tweets.insert(tweetIndex, tweet);
                           }
@@ -96,6 +97,7 @@ class TweetReplyScreen extends ConsumerWidget {
             text: value,
             context: context,
             repliedTo: tweet.id,
+            repliedToUserId: tweet.uid,
           );
         },
         decoration: const InputDecoration(hintText: 'Tweet your reply'),
