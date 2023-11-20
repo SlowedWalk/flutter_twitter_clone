@@ -10,8 +10,8 @@ import 'package:twitter_clone/app/model/tweet_model.dart';
 
 final tweetAPIProvider = Provider((ref) {
   return TweetAPI(
-      db: ref.watch(appwriteDatabaseProvider),
-      realtime: ref.watch(appwriteRealtimeProvider),
+    db: ref.watch(appwriteDatabaseProvider),
+    realtime: ref.watch(appwriteRealtimeProvider),
   );
 });
 
@@ -24,13 +24,15 @@ abstract class ITweetAPI {
   Future<List<Document>> getTweetReplies(Tweet tweet);
   Future<Document> getTweetById(String id);
   Future<List<Document>> getUserTweets(String uid);
+  Future<List<Document>> getTweetsByHashtag(String hashtag);
 }
 
 class TweetAPI implements ITweetAPI {
   final Databases _db;
   final Realtime _realtime;
-  TweetAPI({required Databases db, required Realtime realtime}) :
-        _db = db,
+
+  TweetAPI({required Databases db, required Realtime realtime})
+      : _db = db,
         _realtime = realtime;
 
   @override
@@ -54,12 +56,12 @@ class TweetAPI implements ITweetAPI {
 
   @override
   Future<List<Document>> getTweets() async {
-      final documents = await _db.listDocuments(
-        databaseId: AppWriteConstants.databaseId,
-        collectionId: AppWriteConstants.tweetsCollectionId,
-        queries: [Query.orderDesc('tweetedAt')],
-      );
-      return documents.documents;
+    final documents = await _db.listDocuments(
+      databaseId: AppWriteConstants.databaseId,
+      collectionId: AppWriteConstants.tweetsCollectionId,
+      queries: [Query.orderDesc('tweetedAt')],
+    );
+    return documents.documents;
   }
 
   @override
@@ -73,13 +75,10 @@ class TweetAPI implements ITweetAPI {
   FutureEither<Document> likeTweet(Tweet tweet) async {
     try {
       final document = await _db.updateDocument(
-        databaseId: AppWriteConstants.databaseId,
-        collectionId: AppWriteConstants.tweetsCollectionId,
-        documentId: tweet.id,
-        data: {
-          'likes': tweet.likes
-        }
-      );
+          databaseId: AppWriteConstants.databaseId,
+          collectionId: AppWriteConstants.tweetsCollectionId,
+          documentId: tweet.id,
+          data: {'likes': tweet.likes});
       return right(document);
     } on AppwriteException catch (e, st) {
       return left(
@@ -91,16 +90,13 @@ class TweetAPI implements ITweetAPI {
   }
 
   @override
-  FutureEither<Document> updateReShareCount(Tweet tweet) async{
+  FutureEither<Document> updateReShareCount(Tweet tweet) async {
     try {
       final document = await _db.updateDocument(
           databaseId: AppWriteConstants.databaseId,
           collectionId: AppWriteConstants.tweetsCollectionId,
           documentId: tweet.id,
-          data: {
-            'reSharedCount': tweet.reSharedCount
-          }
-      );
+          data: {'reSharedCount': tweet.reSharedCount});
       return right(document);
     } on AppwriteException catch (e, st) {
       return left(
@@ -116,10 +112,7 @@ class TweetAPI implements ITweetAPI {
     final res = await _db.listDocuments(
         databaseId: AppWriteConstants.databaseId,
         collectionId: AppWriteConstants.tweetsCollectionId,
-        queries: [
-          Query.equal('repliedTo', tweet.id)
-        ] 
-    );
+        queries: [Query.equal('repliedTo', tweet.id)]);
     return res.documents;
   }
 
@@ -128,8 +121,7 @@ class TweetAPI implements ITweetAPI {
     return _db.getDocument(
         databaseId: AppWriteConstants.databaseId,
         collectionId: AppWriteConstants.tweetsCollectionId,
-        documentId: id
-    );
+        documentId: id);
   }
 
   @override
@@ -137,9 +129,17 @@ class TweetAPI implements ITweetAPI {
     final documents = await _db.listDocuments(
       databaseId: AppWriteConstants.databaseId,
       collectionId: AppWriteConstants.tweetsCollectionId,
-      queries: [
-        Query.equal('uid', uid)
-      ],
+      queries: [Query.equal('uid', uid)],
+    );
+    return documents.documents;
+  }
+
+  @override
+  Future<List<Document>> getTweetsByHashtag(String hashtag) async {
+    final documents = await _db.listDocuments(
+      databaseId: AppWriteConstants.databaseId,
+      collectionId: AppWriteConstants.tweetsCollectionId,
+      queries: [Query.search('hashtags', hashtag)],
     );
     return documents.documents;
   }
