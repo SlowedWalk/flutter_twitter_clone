@@ -35,11 +35,12 @@ class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   void shareTweet() {
     showSnackBar(context, "Publishing your tweet");
     ref.read(tweetControllerProvider.notifier).shareTweet(
-      images: images,
-      text: tweetTextController.text,
-      context: context,
-      repliedTo: ''
-    );
+          images: images,
+          text: tweetTextController.text,
+          context: context,
+          repliedTo: '',
+          repliedToUserId: '',
+        );
     Future.delayed(const Duration(seconds: 3))
         .then((value) => Navigator.pop(context));
   }
@@ -57,10 +58,10 @@ class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          tooltip: "Close",
-          onPressed: () {
-            Navigator.pop(context);
-          },
+            tooltip: "Close",
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: const Icon(Icons.close, size: 24)),
         actions: [
           RoundedSmBtn(
@@ -72,84 +73,73 @@ class __CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
         ],
       ),
       body: isLoading || currentUser == null
-        ? const Loader()
-        : SafeArea(
-          child: SingleChildScrollView(
-          child: Column(children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(currentUser.profilePic),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: tweetTextController,
-                    style: const TextStyle(
-                      color: Pallet.whiteColor,
-                      fontSize: 22,
+          ? const Loader()
+          : SafeArea(
+              child: SingleChildScrollView(
+              child: Column(children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(currentUser.profilePic),
                     ),
-                    decoration: const InputDecoration(
-                      hintText: "What's happening?",
-                      hintStyle: TextStyle(
-                          color: Pallet.greyColor,
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: tweetTextController,
+                        style: const TextStyle(
+                          color: Pallet.whiteColor,
                           fontSize: 22,
-                          fontWeight: FontWeight.w600),
-                      border: InputBorder.none,
-                    ),
-                    maxLines: null,
-                  ),
-                )
-              ],
-            ),
-            if (images.isNotEmpty)
-              CarouselSlider(
-                items: images.map((file) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Image.file(file),
-                  );
-                }).toList(),
-                options: CarouselOptions(
-                  height: 400,
-                  enableInfiniteScroll: false,
-                )
-              )
-          ]),
-        )),
+                        ),
+                        decoration: const InputDecoration(
+                          hintText: "What's happening?",
+                          hintStyle: TextStyle(
+                              color: Pallet.greyColor,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600),
+                          border: InputBorder.none,
+                        ),
+                        maxLines: null,
+                      ),
+                    )
+                  ],
+                ),
+                if (images.isNotEmpty)
+                  CarouselSlider(
+                      items: images.map((file) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Image.file(file),
+                        );
+                      }).toList(),
+                      options: CarouselOptions(
+                        height: 400,
+                        enableInfiniteScroll: false,
+                      ))
+              ]),
+            )),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Pallet.greyColor.withOpacity(0.8),
-              width: 0.3
-            )
-          )
-        ),
+            border: Border(
+                top: BorderSide(
+                    color: Pallet.greyColor.withOpacity(0.8), width: 0.3))),
         child: Row(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0).copyWith(left: 15, right: 15),
               child: GestureDetector(
-                onTap: onPickImage,
-                child: SvgPicture.asset(
-                    AssetsConstants.galleryIcon)
-              ),
+                  onTap: onPickImage,
+                  child: SvgPicture.asset(AssetsConstants.galleryIcon)),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0).copyWith(left: 15, right: 15),
-              child: SvgPicture.asset(
-                  AssetsConstants.gifIcon
-              ),
+              child: SvgPicture.asset(AssetsConstants.gifIcon),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0).copyWith(left: 15, right: 15),
-              child: SvgPicture.asset(
-                  AssetsConstants.emojiIcon
-              ),
+              child: SvgPicture.asset(AssetsConstants.emojiIcon),
             ),
           ],
         ),

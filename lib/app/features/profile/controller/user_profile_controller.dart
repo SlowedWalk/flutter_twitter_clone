@@ -5,21 +5,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/app/api/storage_api.dart';
 import 'package:twitter_clone/app/api/tweet_api.dart';
 import 'package:twitter_clone/app/api/user_api.dart';
+import 'package:twitter_clone/app/core/enums/notification_type_enum.dart';
+import 'package:twitter_clone/app/features/notification/controller/notification_controller.dart';
 import 'package:twitter_clone/app/model/tweet_model.dart';
 import 'package:twitter_clone/app/core/core.dart';
 import 'package:twitter_clone/app/model/user_model.dart';
 
-
-final userProfileControllerProvider = StateNotifierProvider<UserProfileController, bool>((ref) {
+final userProfileControllerProvider =
+    StateNotifierProvider<UserProfileController, bool>((ref) {
   return UserProfileController(
       tweetApi: ref.watch(tweetAPIProvider),
       storageAPI: ref.watch(storageAPIProvider),
-      userAPI: ref.watch(userAPIProvider)
-  );
+      userAPI: ref.watch(userAPIProvider),
+      notificationController:
+          ref.watch(notificationControllerProvider.notifier));
 });
 
 final getUserTweetsProvider = FutureProvider.family((ref, String uid) async {
-  final userProfileController = ref.watch(userProfileControllerProvider.notifier);
+  final userProfileController =
+      ref.watch(userProfileControllerProvider.notifier);
   return userProfileController.getUserTweets(uid);
 });
 
@@ -32,15 +36,17 @@ class UserProfileController extends StateNotifier<bool> {
   final TweetAPI _tweetApi;
   final StorageAPI _storageAPI;
   final UserAPI _userAPI;
+  final NotificationController _notificationController;
 
   UserProfileController({
     required TweetAPI tweetApi,
     required StorageAPI storageAPI,
     required UserAPI userAPI,
-  }) :
-        _tweetApi = tweetApi,
+    required NotificationController notificationController,
+  })  : _tweetApi = tweetApi,
         _storageAPI = storageAPI,
         _userAPI = userAPI,
+        _notificationController = notificationController,
         super(false);
 
   Future<List<Tweet>> getUserTweets(String uid) async {
@@ -63,7 +69,8 @@ class UserProfileController extends StateNotifier<bool> {
     }
 
     if (profileImageFile != null) {
-      final profileImageUrl = await _storageAPI.uploadImages([profileImageFile]);
+      final profileImageUrl =
+          await _storageAPI.uploadImages([profileImageFile]);
       userModel = userModel.copyWith(
         profilePic: profileImageUrl[0],
       );
@@ -72,17 +79,15 @@ class UserProfileController extends StateNotifier<bool> {
     final res = await _userAPI.updateUserData(userModel);
     state = false;
     res.fold(
-            (l) => showSnackBar(context, l.message),
-            (r) => Navigator.pop(context)
-    );
+        (l) => showSnackBar(context, l.message), (r) => Navigator.pop(context));
   }
 
   void followUser({
     required UserModel user,
     required BuildContext context,
     required UserModel currentUser,
-}) async {
-    if(currentUser.following.contains(user.uid)) {
+  }) async {
+    if (currentUser.following.contains(user.uid)) {
       user.followers.remove(currentUser.uid);
       currentUser.following.remove(user.uid);
     } else {
@@ -94,16 +99,15 @@ class UserProfileController extends StateNotifier<bool> {
     currentUser = currentUser.copyWith(following: currentUser.following);
 
     final res = await _userAPI.followUser(user);
-    res.fold(
-            (l) => showSnackBar(context, l.message),
-            (r) async {
-              final res2 = await _userAPI.addToFollowing(currentUser);
-              res2.fold(
-                      (l) => showSnackBar(context, l.message),
-                      (r) => null
-              );
-            }
-    );
+    res.fold((l) => showSnackBar(context, l.message), (r) async {
+      final res2 = await _userAPI.addToFollowing(currentUser);
+      res2.fold((l) => showSnackBar(context, l.message), (r) {
+        _notificationController.createNotification(
+            text: '${currentUser.username} is now following you 👌',
+            tweetId: '',
+            notificationType: NotificationType.follow,
+            uid: user.uid);
+      });
+    });
   }
-
 }

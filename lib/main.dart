@@ -19,18 +19,16 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Twittify',
       theme: AppTheme.theme,
+      debugShowCheckedModeBanner: false,
       home: ref.watch(currentUserAccountProvider).when(
           data: (user) {
-            if(user !=null) {
+            if (user != null) {
               return const HomeView();
             }
             return const LoginView();
           },
-          error: (error, stackTrace) => ErrorPage(
-              error: error.toString()
-          ),
-          loading: () => const LoadingPage()
-      ),
+          error: (error, stackTrace) => ErrorPage(error: error.toString()),
+          loading: () => const LoadingPage()),
     );
   }
 }

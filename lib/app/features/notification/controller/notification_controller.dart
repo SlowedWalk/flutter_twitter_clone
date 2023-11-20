@@ -9,8 +9,18 @@ import 'package:twitter_clone/app/model/notification_model.dart';
 final notificationControllerProvider =
     StateNotifierProvider<NotificationController, bool>((ref) {
   return NotificationController(
-    notificationAPI: ref.watch(notificationAPIProvider)
-  );
+      notificationAPI: ref.watch(notificationAPIProvider));
+});
+
+final getLatestNotificationsProvider = StreamProvider((ref) {
+  final notificationAPI = ref.watch(notificationAPIProvider);
+  return notificationAPI.getLatestNotifications();
+});
+
+final getNotificationsProvider = FutureProvider.family((ref, String uid) async {
+  final notificationController =
+      ref.watch(notificationControllerProvider.notifier);
+  return notificationController.getNotifications(uid);
 });
 
 class NotificationController extends StateNotifier<bool> {
@@ -18,28 +28,29 @@ class NotificationController extends StateNotifier<bool> {
 
   NotificationController({
     required NotificationAPI notificationAPI,
-  }) : _notificationAPI = notificationAPI,
-    super(false);
+  })  : _notificationAPI = notificationAPI,
+        super(false);
 
-    void createNotification({
-      required String text,
-      required String tweetId,
-      required NotificationType notificationType,
-      required String uid,
-    }) async {
-      final notification = Notification(
+  void createNotification({
+    required String text,
+    required String tweetId,
+    required NotificationType notificationType,
+    required String uid,
+  }) async {
+    final notification = Notification(
         text: text,
         tweetId: tweetId,
         notificationType: notificationType,
         uid: uid,
-        id: ''
-      );
+        id: '');
 
-      final res = await _notificationAPI.createNotification(notification);
+    final res = await _notificationAPI.createNotification(notification);
 
-      return res.fold(
-        (l) => log(l.message),
-        (r) => null
-      );
-    }
+    return res.fold((l) => null, (r) => null);
+  }
+
+  Future<List<Notification>> getNotifications(String uid) async {
+    final notifications = await _notificationAPI.getNotifications(uid);
+    return notifications.map((e) => Notification.fromMap(e.data)).toList();
+  }
 }

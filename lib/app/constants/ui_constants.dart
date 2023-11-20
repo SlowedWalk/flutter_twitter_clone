@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:twitter_clone/app/constants/constants.dart';
 import 'package:twitter_clone/app/features/explore/views/explore_view.dart';
+import 'package:twitter_clone/app/features/notification/views/notification_view.dart';
 import 'package:twitter_clone/app/features/tweet/widget/tweet_list.dart';
 import 'package:twitter_clone/app/theme/theme.dart';
-// import 'package:twitter_clone/features/explore/view/explore_view.dart';
-// import 'package:twitter_clone/features/notifications/views/notification_view.dart';
 
 class UIConstants {
   static AppBar appBar() {
@@ -20,9 +19,8 @@ class UIConstants {
   }
 
   static const List<Widget> bottomTabBarPages = [
-    // NotificationView(),
     TweetList(),
     ExploreView(),
-    Text("Notification Screen"),
- ];
+    NotificationView(),
+  ];
 }
