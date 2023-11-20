@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:twitter_clone/app/api/notification_api.dart';
 import 'package:twitter_clone/app/api/storage_api.dart';
 import 'package:twitter_clone/app/api/tweet_api.dart';
+import 'package:twitter_clone/app/core/enums/notification_type_enum.dart';
 import 'package:twitter_clone/app/core/enums/tweet_type_enum.dart';
 import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
+import 'package:twitter_clone/app/features/notification/controller/notification_controller.dart';
 import 'package:twitter_clone/app/model/tweet_model.dart';
 
 import 'package:twitter_clone/app/core/core.dart';
@@ -15,9 +18,12 @@ import 'package:twitter_clone/app/model/user_model.dart';
 
 final tweetControllerProvider = StateNotifierProvider<TweetController, bool>((ref) {
   return TweetController(
-      ref: ref,
-      tweetAPI: ref.watch(tweetAPIProvider),
-      storageAPI: ref.watch(storageAPIProvider),
+    ref: ref,
+    tweetAPI: ref.watch(tweetAPIProvider),
+    storageAPI: ref.watch(storageAPIProvider),
+    notificationController: ref.watch(
+      notificationControllerProvider.notifier
+    )
   );
 });
 
@@ -43,11 +49,19 @@ class TweetController extends StateNotifier<bool> {
   final Ref _ref;
   final TweetAPI _tweetAPI;
   final StorageAPI _storageAPI;
-  TweetController({required Ref ref, required TweetAPI tweetAPI, required StorageAPI storageAPI}):
-        _ref = ref,
-        _tweetAPI = tweetAPI,
-        _storageAPI = storageAPI,
-        super(false);
+  final NotificationController _notificationController;
+
+  TweetController({
+    required Ref ref,
+    required TweetAPI tweetAPI,
+    required StorageAPI storageAPI,
+    required NotificationController notificationController
+  }):
+    _ref = ref,
+    _tweetAPI = tweetAPI,
+    _storageAPI = storageAPI,
+    _notificationController = notificationController,
+    super(false);
 
   Future<List<Tweet>> getTweets() async {
     final tweets = await _tweetAPI.getTweets();
@@ -61,7 +75,7 @@ class TweetController extends StateNotifier<bool> {
 
   void likeTweet(Tweet tweet, UserModel user) async {
     List<String> likes = tweet.likes;
-    
+
     if(tweet.likes.contains(user.uid)) {
       likes.remove(user.uid);
     } else {
@@ -71,7 +85,17 @@ class TweetController extends StateNotifier<bool> {
 
     final res = await _tweetAPI.likeTweet(tweet);
 
-    res.fold((l) => null, (r) => null);
+    res.fold(
+      (l) => null,
+      (r) {
+        _notificationController.createNotification(
+          text: '${user.username} liked your tweet 👌',
+          tweetId: tweet.id,
+          notificationType: NotificationType.like,
+          uid: tweet.uid
+        );
+      }
+    );
   }
 
   void reShareTweet(Tweet tweet, UserModel currentUser, BuildContext context) async {

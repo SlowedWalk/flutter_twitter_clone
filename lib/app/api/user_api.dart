@@ -33,8 +33,8 @@ class UserAPI implements IUserAPI {
     required Databases db,
     required Realtime realtime
   }) :
-        _db = db,
-        _realtime = realtime;
+      _db = db,
+      _realtime = realtime;
 
   @override
   FutureEitherVoid saveUserData(UserModel userModel) async {
