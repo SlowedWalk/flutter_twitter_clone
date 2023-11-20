@@ -77,51 +77,60 @@ class TweetCard extends ConsumerWidget {
                                 Row(
                                   children: [
                                     Container(
-                                      margin: const EdgeInsets.only(right: 5),
+                                      margin: EdgeInsets.only(right: user.isTwitterBlue ? 1 : 5),
                                       child: Text(user.username,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18)),
                                     ),
+                                    if(user.isTwitterBlue)
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 5),
+                                        child: SvgPicture.asset(AssetsConstants.verifiedIcon),
+                                      ),
                                     Text(
-                                        '@${user.username} . ${timeago.format(tweet.tweetedAt, locale: 'en_short')}',
-                                        style: const TextStyle(
-                                            color: Pallet.greyColor,
-                                            fontSize: 16)),
+                                      '@${user.username} . ${timeago.format(tweet.tweetedAt, locale: 'en_short')}',
+                                      style: const TextStyle(
+                                        color: Pallet.greyColor,
+                                        fontSize: 16)),
                                   ],
                                 ),
                                 if (tweet.repliedTo.isNotEmpty)
                                   ref
-                                      .watch(
-                                          getTweetByIdProvider(tweet.repliedTo))
-                                      .when(
-                                          data: (repliedToTweet) {
-                                            final repliedToUser = ref
-                                                .watch(userDetailsProvider(
-                                                    repliedToTweet.uid))
-                                                .value;
-                                            return RichText(
-                                                text: TextSpan(
-                                                    text: 'Replying to',
-                                                    style: const TextStyle(
-                                                        color: Pallet.greyColor,
-                                                        fontSize: 16),
-                                                    children: [
-                                                  TextSpan(
-                                                    text:
-                                                        ' @${repliedToUser?.username}',
-                                                    style: const TextStyle(
-                                                        color: Pallet.blueColor,
-                                                        fontSize: 16),
-                                                  ),
-                                                ]));
-                                          },
-                                          error: (error, stackTrace) =>
-                                              ErrorText(
-                                                  error: error.toString()),
-                                          loading: () => const Center(
-                                              child:
-                                                  CircularProgressIndicator())),
+                                    .watch(
+                                      getTweetByIdProvider(tweet.repliedTo))
+                                    .when(
+                                      data: (repliedToTweet) {
+                                        final repliedToUser = ref
+                                          .watch(userDetailsProvider(
+                                            repliedToTweet.uid))
+                                          .value;
+                                        return RichText(
+                                          text: TextSpan(
+                                            text: 'Replying to',
+                                            style: const TextStyle(
+                                              color: Pallet.greyColor,
+                                              fontSize: 16),
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                ' @${repliedToUser?.username}',
+                                              style: const TextStyle(
+                                                color: Pallet.blueColor,
+                                                fontSize: 16
+                                              ),
+                                            ),
+                                          ])
+                                        );
+                                      },
+                                      error: (error, stackTrace) =>
+                                        ErrorText(
+                                          error: error.toString()),
+                                      loading: () => const Center(
+                                        child:
+                                          CircularProgressIndicator()
+                                        )
+                                      ),
                                 HashtagText(text: tweet.text),
                                 if (tweet.tweetType == TweetType.image)
                                   CarouselImage(imageLinks: tweet.imageLinks),

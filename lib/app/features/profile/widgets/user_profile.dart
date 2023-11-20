@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:twitter_clone/app/common/common.dart';
 import 'package:twitter_clone/app/constants/constants.dart';
 import 'package:twitter_clone/app/features/auth/controllers/auth_controller.dart';
@@ -33,7 +34,7 @@ class UserProfile extends ConsumerWidget {
                     Positioned.fill(
                       child: user.bannerPic.isEmpty
                         ? Container(color: Pallet.blueColor)
-                        : Image.network(user.bannerPic, fit: BoxFit.fitHeight)
+                        : Image.network(user.bannerPic, fit: BoxFit.fill)
                     ),
                     Positioned(
                       bottom: 10,
@@ -87,12 +88,21 @@ class UserProfile extends ConsumerWidget {
                 sliver: SliverList(
                   delegate: SliverChildListDelegate(
                     [
-                      Text(
-                        user.username,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            user.username,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          if(user.isTwitterBlue)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: SvgPicture.asset(AssetsConstants.verifiedIcon),
+                            ),
+                        ],
                       ),
                       Text(
                         '@${user.username}',
